@@ -14,20 +14,22 @@ public final class R {
         public static final int icon=0x7f020000;
     }
     public static final class id {
-        public static final int buttonLayout=0x7f050007;
+        public static final int buttonLayout=0x7f050009;
         public static final int gameNameLeft=0x7f050000;
         public static final int gameNameRight=0x7f050001;
-        public static final int guessButton=0x7f050006;
-        public static final int guessListLeft=0x7f050003;
-        public static final int guessListRight=0x7f050004;
-        public static final int guessText=0x7f050005;
-        public static final int menuChangePlayerButton=0x7f05000a;
-        public static final int menuNewGameButton=0x7f050009;
-        public static final int menuWelcomeText=0x7f050008;
-        public static final int playerButton=0x7f05000d;
-        public static final int playerList=0x7f05000b;
-        public static final int playerName=0x7f05000c;
-        public static final int scrollView=0x7f050002;
+        public static final int gameNumberLeft=0x7f050002;
+        public static final int gameNumberRight=0x7f050003;
+        public static final int guessButton=0x7f050008;
+        public static final int guessListLeft=0x7f050005;
+        public static final int guessListRight=0x7f050006;
+        public static final int guessText=0x7f050007;
+        public static final int menuChangePlayerButton=0x7f05000c;
+        public static final int menuNewGameButton=0x7f05000b;
+        public static final int menuWelcomeText=0x7f05000a;
+        public static final int playerButton=0x7f05000f;
+        public static final int playerList=0x7f05000d;
+        public static final int playerName=0x7f05000e;
+        public static final int scrollView=0x7f050004;
     }
     public static final class layout {
         public static final int game=0x7f030000;
@@ -38,10 +40,13 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f040001;
+        public static final int game_make_guess=0x7f040008;
+        public static final int game_set_number=0x7f040009;
         public static final int hello=0x7f040000;
         public static final int menu_change_player=0x7f040004;
         public static final int menu_new_game=0x7f040002;
         public static final int menu_welcome=0x7f040003;
+        public static final int ok=0x7f04000a;
         public static final int player_create=0x7f040006;
         public static final int player_new=0x7f040007;
         public static final int player_select=0x7f040005;

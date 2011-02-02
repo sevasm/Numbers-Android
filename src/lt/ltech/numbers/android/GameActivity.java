@@ -15,6 +15,8 @@ import lt.ltech.numbers.player.ArtificialPlayer;
 import lt.ltech.numbers.player.Player;
 import lt.ltech.numbers.player.RandomPlayer;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
@@ -31,7 +33,9 @@ public class GameActivity extends Activity {
     private LinearLayout guessListLeft;
     private LinearLayout guessListRight;
     private LinearLayout buttonLayout;
+    private Button guessButton;
     private Button[] buttonArray;
+    private Button clearButton;
     private EditText guessText;
 
     private GameState gameState;
@@ -40,11 +44,14 @@ public class GameActivity extends Activity {
     private Player computerPlayer;
     private Map<Player, ArtificialPlayer> artificialPlayers;
 
+    private TextView numberLeft;
+    private TextView numberRight;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.game);
-        Button gameButton = (Button) this.findViewById(R.id.guessButton);
+        this.guessButton = (Button) this.findViewById(R.id.guessButton);
 
         this.guessListLeft = (LinearLayout) this
                 .findViewById(R.id.guessListLeft);
@@ -55,7 +62,7 @@ public class GameActivity extends Activity {
         this.guessText.setClickable(false);
         this.guessText.setFocusable(false);
 
-        gameButton.setOnClickListener(this.getOnClickListener());
+        this.guessButton.setOnClickListener(this.getOnClickListener());
 
         this.buttonLayout = (LinearLayout) this.findViewById(R.id.buttonLayout);
         this.buttonArray = new Button[10];
@@ -66,6 +73,14 @@ public class GameActivity extends Activity {
             this.buttonLayout.addView(b);
             this.buttonArray[i] = b;
         }
+        this.clearButton = new Button(this);
+        this.clearButton.setText("C");
+        this.clearButton.setOnClickListener(this.getClearOnClickListener());
+        this.buttonLayout.addView(this.clearButton);
+
+        this.numberLeft = (TextView) this.findViewById(R.id.gameNumberLeft);
+        this.numberRight = (TextView) this.findViewById(R.id.gameNumberRight);
+
         this.gameState = new GameState();
 
         this.humanPlayer = (Player) this.getIntent().getExtras()
@@ -128,6 +143,10 @@ public class GameActivity extends Activity {
                             a.gameState.setNumber(a.humanPlayer, guess);
                             logger.i("%s has chosen %s", a.humanPlayer,
                                     a.humanPlayer.getNumber());
+                            a.numberLeft.setText(a.humanPlayer.getNumber()
+                                    .toString());
+                            a.guessButton.setText(a
+                                    .getString(R.string.game_make_guess));
                         } catch (GameException ge) {
                             logger.d(ge.getMessage());
                         }
@@ -161,6 +180,14 @@ public class GameActivity extends Activity {
                         case SET_NUMBER:
                             try {
                                 a.gameState.setNumber(p, ap.inventNumber());
+                                logger.i("%s has chosen %s", a.computerPlayer,
+                                        a.computerPlayer.getNumber());
+                                String secretNumber = "";
+                                for (int i = 0; i < GameConfiguration
+                                        .numberLength(); i++) {
+                                    secretNumber += "?";
+                                }
+                                a.numberRight.setText(secretNumber);
                             } catch (GameException ge) {
                                 logger.d(ge.getMessage());
                             }
@@ -183,6 +210,21 @@ public class GameActivity extends Activity {
 
                 if (a.isGameOver()) {
                     logger.i("Game Over");
+                    AlertDialog.Builder b = new AlertDialog.Builder(a);
+                    Player winner = a.gameState.getWinner();
+                    int turns = a.gameState.getRounds().size();
+                    b.setTitle("Game Over");
+                    b.setMessage(String.format(
+                            "The game is over. %s has won in %d turns", winner,
+                            turns));
+                    b.setNeutralButton(getString(R.string.ok),
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog,
+                                        int which) {
+                                    a.finish();
+                                }
+                            });
+                    b.show();
                 }
             }
         };
@@ -196,6 +238,20 @@ public class GameActivity extends Activity {
                 String text = a.guessText.getText().toString();
                 a.guessText.setText(text + buttonNumber);
                 a.buttonArray[buttonNumber].setEnabled(false);
+                a.resetButtonState();
+            }
+        };
+    }
+
+    private OnClickListener getClearOnClickListener() {
+        final GameActivity a = this;
+        return new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = a.guessText.getText().toString();
+                if (text.length() > 0) {
+                    a.guessText.setText(text.substring(0, text.length() - 1));
+                }
                 a.resetButtonState();
             }
         };
