@@ -1,4 +1,4 @@
-package lt.ltech.numbers.persistence.mapping;
+package lt.ltech.numbers.android.persistence.mapping;
 
 import lt.ltech.numbers.player.Player;
 import android.content.ContentValues;

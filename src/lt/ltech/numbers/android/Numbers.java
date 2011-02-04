@@ -3,8 +3,8 @@ package lt.ltech.numbers.android;
 import java.util.List;
 
 import lt.ltech.numbers.android.log.Logger;
-import lt.ltech.numbers.persistence.PlayerDao;
-import lt.ltech.numbers.persistence.mapping.PlayerMapper;
+import lt.ltech.numbers.android.persistence.PlayerDao;
+import lt.ltech.numbers.android.persistence.mapping.PlayerMapper;
 import lt.ltech.numbers.player.Player;
 import android.app.Activity;
 import android.content.Intent;

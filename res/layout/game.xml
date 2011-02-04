@@ -1,66 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    <LinearLayout android:orientation="horizontal"
-        android:layout_width="fill_parent" android:layout_height="wrap_content">
-        <TextView android:id="@+id/gameNameLeft"
-            android:layout_width="fill_parent" android:layout_height="wrap_content"
-            android:layout_gravity="fill_horizontal"
-            android:layout_weight="1.0" />
-        <TextView android:id="@+id/gameNameRight"
-            android:layout_width="fill_parent" android:layout_height="wrap_content"
-            android:layout_gravity="fill_horizontal"
-            android:layout_weight="1.0" />
+<LinearLayout xmlns:a="http://schemas.android.com/apk/res/android"
+    a:orientation="vertical" a:layout_width="fill_parent"
+    a:layout_height="fill_parent">
+    <LinearLayout a:orientation="horizontal"
+        a:layout_width="fill_parent" a:layout_height="wrap_content">
+        <TextView a:id="@+id/gameNameLeft" a:layout_width="fill_parent"
+            a:layout_height="wrap_content" a:layout_gravity="fill_horizontal"
+            a:layout_weight="1.0" style="@style/NameText" />
+        <TextView a:id="@+id/gameNameRight" a:layout_width="fill_parent"
+            a:layout_height="wrap_content" a:layout_gravity="fill_horizontal"
+            a:layout_weight="1.0" style="@style/NameText" />
     </LinearLayout>
-    <LinearLayout android:orientation="horizontal"
-        android:layout_width="fill_parent" android:layout_height="wrap_content">
-        <TextView android:id="@+id/gameNumberLeft"
-            android:layout_width="fill_parent" android:layout_height="wrap_content"
-            android:layout_gravity="fill_horizontal"
-            android:layout_weight="1.0" />
-        <TextView android:id="@+id/gameNumberRight"
-            android:layout_width="fill_parent" android:layout_height="wrap_content"
-            android:layout_gravity="fill_horizontal"
-            android:layout_weight="1.0" />
+    <LinearLayout a:orientation="horizontal"
+        a:layout_width="fill_parent" a:layout_height="wrap_content">
+        <TextView a:id="@+id/gameNumberLeft" a:layout_width="fill_parent"
+            a:layout_height="wrap_content" a:layout_gravity="fill_horizontal"
+            a:layout_weight="1.0" style="@style/NumberText" />
+        <TextView a:id="@+id/gameNumberRight" a:layout_width="fill_parent"
+            a:layout_height="wrap_content" a:layout_gravity="fill_horizontal"
+            a:layout_weight="1.0" style="@style/NumberText" />
     </LinearLayout>
-    <ScrollView android:id="@+id/scrollView"
-        android:layout_width="fill_parent" android:layout_height="wrap_content"
-        android:layout_gravity="fill" android:layout_weight="1.0">
-        <LinearLayout android:orientation="horizontal"
-            android:layout_width="fill_parent" android:layout_height="fill_parent">
-            <LinearLayout android:id="@+id/guessListLeft"
-                android:orientation="vertical" android:layout_width="fill_parent"
-                android:layout_gravity="left" android:layout_weight="1.0"
-                android:layout_height="fill_parent">
+    <ScrollView a:id="@+id/scrollView" a:layout_width="fill_parent"
+        a:layout_height="wrap_content" a:layout_gravity="fill"
+        a:layout_weight="1.0">
+        <LinearLayout a:orientation="horizontal"
+            a:layout_width="fill_parent" a:layout_height="fill_parent">
+            <LinearLayout a:id="@+id/guessListLeft"
+                a:orientation="vertical" a:layout_width="fill_parent"
+                a:layout_gravity="left" a:layout_weight="1.0"
+                a:layout_height="fill_parent">
 
             </LinearLayout>
-            <LinearLayout android:id="@+id/guessListRight"
-                android:orientation="vertical" android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_gravity="right" android:layout_weight="1.0">
+            <LinearLayout a:id="@+id/guessListRight"
+                a:orientation="vertical" a:layout_width="fill_parent"
+                a:layout_height="fill_parent" a:layout_gravity="right"
+                a:layout_weight="1.0">
 
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-    <LinearLayout android:orientation="vertical"
-        android:layout_width="fill_parent" android:layout_height="wrap_content">
-        <LinearLayout android:orientation="horizontal"
-            android:layout_width="fill_parent" android:layout_height="wrap_content">
-            <EditText android:id="@+id/guessText"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1.0">s
+    <LinearLayout a:orientation="vertical" a:layout_width="fill_parent"
+        a:layout_height="wrap_content">
+        <LinearLayout a:orientation="horizontal"
+            a:layout_width="fill_parent" a:layout_height="wrap_content">
+            <EditText a:id="@+id/guessText" a:layout_width="wrap_content"
+                a:layout_height="fill_parent" a:width="80dp">
             </EditText>
-            <Button android:id="@+id/guessButton"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="0.5" android:text="@string/game_set_number">
+            <Button a:id="@+id/gameClearButton" a:layout_height="fill_parent"
+                a:layout_width="wrap_content" a:width="20dp"
+                a:layout_weight="0.2" a:text="C">
+            </Button>
+            <Button a:id="@+id/gameGuessButton" a:layout_width="wrap_content"
+                a:layout_height="fill_parent" a:width="0dp"
+                a:layout_weight="1.0" a:text="@string/game_set_number">
             </Button>
         </LinearLayout>
-        <LinearLayout android:id="@+id/buttonLayout"
-            android:orientation="horizontal" android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
+        <LinearLayout a:orientation="horizontal"
+            a:layout_width="fill_parent" a:layout_height="wrap_content">
+            <LinearLayout a:orientation="vertical"
+                a:layout_width="fill_parent" a:layout_height="wrap_content"
+                a:layout_weight="1.0">
+                <LinearLayout a:id="@+id/gameButtonLayoutUpper"
+                    a:orientation="horizontal" a:layout_width="fill_parent"
+                    a:layout_height="wrap_content">
+
+                </LinearLayout>
+                <LinearLayout a:id="@+id/gameButtonLayoutLower"
+                    a:orientation="horizontal" a:layout_width="fill_parent"
+                    a:layout_height="wrap_content">
+
+                </LinearLayout>
+            </LinearLayout>
 
         </LinearLayout>
     </LinearLayout>

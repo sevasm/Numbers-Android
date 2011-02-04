@@ -1,4 +1,4 @@
-package lt.ltech.numbers.persistence;
+package lt.ltech.numbers.android.persistence;
 
 import lt.ltech.numbers.android.log.Logger;
 import android.content.Context;

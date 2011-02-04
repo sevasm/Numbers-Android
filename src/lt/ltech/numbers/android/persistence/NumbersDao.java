@@ -1,10 +1,10 @@
-package lt.ltech.numbers.persistence;
+package lt.ltech.numbers.android.persistence;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import lt.ltech.numbers.android.log.Logger;
-import lt.ltech.numbers.persistence.mapping.EntityMapper;
+import lt.ltech.numbers.android.persistence.mapping.EntityMapper;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;

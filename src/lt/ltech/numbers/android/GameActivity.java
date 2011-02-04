@@ -18,21 +18,25 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.text.Editable;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class GameActivity extends Activity {
     private static final Logger logger = new Logger(
             GameActivity.class.getName());
 
+    private ScrollView scrollView;
     private LinearLayout guessListLeft;
     private LinearLayout guessListRight;
-    private LinearLayout buttonLayout;
+    private LinearLayout lowerButtonLayout;
+    private LinearLayout upperButtonLayout;
     private Button guessButton;
     private Button[] buttonArray;
     private Button clearButton;
@@ -51,8 +55,9 @@ public class GameActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.game);
-        this.guessButton = (Button) this.findViewById(R.id.guessButton);
+        this.guessButton = (Button) this.findViewById(R.id.gameGuessButton);
 
+        this.scrollView = (ScrollView) this.findViewById(R.id.scrollView);
         this.guessListLeft = (LinearLayout) this
                 .findViewById(R.id.guessListLeft);
         this.guessListRight = (LinearLayout) this
@@ -64,19 +69,36 @@ public class GameActivity extends Activity {
 
         this.guessButton.setOnClickListener(this.getOnClickListener());
 
-        this.buttonLayout = (LinearLayout) this.findViewById(R.id.buttonLayout);
+        this.upperButtonLayout = (LinearLayout) this
+                .findViewById(R.id.gameButtonLayoutUpper);
+        this.lowerButtonLayout = (LinearLayout) this
+                .findViewById(R.id.gameButtonLayoutLower);
+
         this.buttonArray = new Button[10];
-        for (int i = 0; i <= 9; i++) {
+        for (int i = 0; i < 5; i++) {
             Button b = new Button(this);
             b.setText(String.valueOf(i));
             b.setOnClickListener(this.getButtonOnClickListener(i));
-            this.buttonLayout.addView(b);
+            LayoutParams lp = new LayoutParams(
+                    ViewGroup.LayoutParams.FILL_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+            this.upperButtonLayout.addView(b, lp);
             this.buttonArray[i] = b;
         }
-        this.clearButton = new Button(this);
-        this.clearButton.setText("C");
+
+        for (int i = 5; i < 10; i++) {
+            Button b = new Button(this);
+            b.setText(String.valueOf(i));
+            b.setOnClickListener(this.getButtonOnClickListener(i));
+            LayoutParams lp = new LayoutParams(
+                    ViewGroup.LayoutParams.FILL_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+            this.lowerButtonLayout.addView(b, lp);
+            this.buttonArray[i] = b;
+        }
+
+        this.clearButton = (Button) this.findViewById(R.id.gameClearButton);
         this.clearButton.setOnClickListener(this.getClearOnClickListener());
-        this.buttonLayout.addView(this.clearButton);
 
         this.numberLeft = (TextView) this.findViewById(R.id.gameNumberLeft);
         this.numberRight = (TextView) this.findViewById(R.id.gameNumberRight);
@@ -109,9 +131,7 @@ public class GameActivity extends Activity {
         return new OnClickListener() {
             @Override
             public void onClick(View v) {
-                logger.d("On Click called");
-                Editable e = gt.getText();
-                String text = e.toString();
+                String text = gt.getText().toString();
 
                 Number guess = null;
                 try {
@@ -165,8 +185,10 @@ public class GameActivity extends Activity {
 
                 if (ll != null) {
                     TextView tv = new TextView(a);
+                    tv.setTextAppearance(a, R.style.GuessText);
                     tv.setText(String.format("%s %s", guess, answer));
                     ll.addView(tv);
+                    a.scrollView.fullScroll(View.FOCUS_DOWN);
                     // TODO make the scroll view scroll all the way to the
                     // bottom
                 }
@@ -199,8 +221,12 @@ public class GameActivity extends Activity {
                                 Answer ans = a.gameState.getLastRound()
                                         .getAnswers().get(a.computerPlayer);
                                 TextView tv = new TextView(a);
+                                tv.setTextAppearance(a, R.style.GuessText);
                                 tv.setText(String.format("%s %s", g, ans));
                                 a.guessListRight.addView(tv);
+                                a.scrollView.fullScroll(View.FOCUS_DOWN);
+                                // TODO make the scroll view scroll all the way
+                                // to the bottom
                             } catch (GameException ge) {
                                 logger.d(ge.getMessage());
                             }

@@ -1,4 +1,4 @@
-package lt.ltech.numbers.persistence.mapping;
+package lt.ltech.numbers.android.persistence.mapping;
 
 import android.content.ContentValues;
 import android.database.Cursor;
