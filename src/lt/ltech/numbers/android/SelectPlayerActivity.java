@@ -1,6 +1,7 @@
 package lt.ltech.numbers.android;
 
 import java.util.List;
+import java.util.UUID;
 
 import lt.ltech.numbers.android.log.Logger;
 import lt.ltech.numbers.android.persistence.PlayerDao;
@@ -29,16 +30,20 @@ public class SelectPlayerActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.player);
+
         this.playerList = (ListView) this.findViewById(R.id.playerList);
         ArrayAdapter<Player> adapter = new ArrayAdapter<Player>(this,
                 R.layout.player_view);
         this.playerList.setAdapter(adapter);
+        this.playerList.setOnItemClickListener(this.getOnItemClickListener());
+
         this.players = new PlayerDao(this).findAll(new PlayerMapper());
         for (Player player: this.players) {
             adapter.add(player);
         }
-        this.playerList.setOnItemClickListener(this.getOnItemClickListener());
+
         this.nameText = (TextView) this.findViewById(R.id.playerName);
+
         Button b = (Button) this.findViewById(R.id.playerButton);
         b.setOnClickListener(this.getOnClickListener());
     }
@@ -67,13 +72,13 @@ public class SelectPlayerActivity extends Activity {
                 String name = activity.nameText.getText().toString();
                 if (name != null && !name.equals("")) {
                     PlayerDao dao = new PlayerDao(activity);
-                    Player p = new Player(name);
+                    Player player = new Player(UUID.randomUUID(), name);
                     PlayerMapper pm = new PlayerMapper();
-                    Long id = dao.insert(p, pm);
-                    p = dao.findById(id, pm);
-                    logger.d("Created %s", p);
+                    Long id = dao.insert(player, pm);
+                    player = dao.findById(id, pm);
+                    logger.d("Created %s", player);
                     Intent result = new Intent();
-                    result.putExtra("player", p);
+                    result.putExtra("player", player);
                     activity.setResult(RESULT_OK, result);
                     activity.finish();
                 }

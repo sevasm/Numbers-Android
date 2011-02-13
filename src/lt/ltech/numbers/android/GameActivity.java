@@ -3,6 +3,7 @@ package lt.ltech.numbers.android;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import lt.ltech.numbers.GameException;
 import lt.ltech.numbers.android.log.Logger;
@@ -109,7 +110,7 @@ public class GameActivity extends Activity {
                 .getSerializable("player");
         ((TextView) this.findViewById(R.id.gameNameLeft))
                 .setText(this.humanPlayer.getName());
-        this.computerPlayer = new Player("Computer player");
+        this.computerPlayer = new Player(UUID.randomUUID(), "Computer player");
         this.computerPlayer.setId(2l);
         ((TextView) this.findViewById(R.id.gameNameRight))
                 .setText(this.computerPlayer.getName());

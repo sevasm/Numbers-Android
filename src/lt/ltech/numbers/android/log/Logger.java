@@ -2,6 +2,11 @@ package lt.ltech.numbers.android.log;
 
 import android.util.Log;
 
+/**
+ * A convenient wrapper for Android logging. It makes logging simpler by
+ * enabling tag re-use and passing messages and their parameters directly to
+ * String.format()
+ */
 public class Logger {
     private final String tag;
 

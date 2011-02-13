@@ -58,5 +58,6 @@ public final class R {
         public static final int GuessText=0x7f050003;
         public static final int NameText=0x7f050001;
         public static final int NumberText=0x7f050002;
+        public static final int PlayerText=0x7f050004;
     }
 }

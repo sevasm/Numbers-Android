@@ -27,7 +27,7 @@ public class Numbers extends Activity {
         setContentView(R.layout.menu);
         this.player = null;
         List<Player> players = new PlayerDao(this).findAll(new PlayerMapper());
-        if (players.size() >= 0) {
+        if (players.size() >= 1) {
             this.player = players.get(0);
             this.setWelcomeMessage();
         } else {

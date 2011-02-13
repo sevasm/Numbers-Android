@@ -11,7 +11,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
 public abstract class NumbersDao {
-    private static final Logger logger = new Logger(NumbersDao.class.getName());
+    private final Logger logger = new Logger(this.getClass().getName());
     private DatabaseHelper pm;
 
     public NumbersDao(Context context) {
@@ -27,12 +27,12 @@ public abstract class NumbersDao {
                     null, null, null, null);
             while (c.moveToNext()) {
                 E entity = mapper.mapRow(c);
-                logger.d("Retrieved %s", entity);
+                this.logger.d("Retrieved %s", entity);
                 entities.add(entity);
             }
-            logger.d("Retrieved %d entities", entities.size());
+            this.logger.d("Retrieved %d entities", entities.size());
         } catch (SQLException e) {
-            logger.w("Failed to find all entities");
+            this.logger.w("Failed to find all entities");
             throw e;
         } finally {
             if (c != null) {
@@ -52,9 +52,9 @@ public abstract class NumbersDao {
                     "id = ?", new String[] { id.toString() }, null, null, null);
             c.moveToFirst();
             entity = mapper.mapRow(c);
-            logger.d("Retrieved %s with ID %d", entity, id);
+            this.logger.d("Retrieved %s with ID %d", entity, id);
         } catch (SQLException e) {
-            logger.w("Found entity with ID %d", id);
+            this.logger.w("Found entity with ID %d", id);
             throw e;
         } finally {
             if (c != null) {
@@ -71,9 +71,9 @@ public abstract class NumbersDao {
             SQLiteDatabase database = this.pm.getWritableDatabase();
             id = database.insert(this.getTableName(), null,
                     mapper.toContentValues(entity));
-            logger.d("Inserted %s with ID %d", entity, id);
+            this.logger.d("Inserted %s with ID %d", entity, id);
         } catch (SQLException e) {
-            logger.w("Failed to insert %s into the database", entity);
+            this.logger.w("Failed to insert %s into the database", entity);
             throw e;
         } finally {
             this.pm.close();
@@ -86,9 +86,9 @@ public abstract class NumbersDao {
             SQLiteDatabase database = this.pm.getWritableDatabase();
             database.delete(this.getTableName(), "id = ?",
                     new String[] { id.toString() });
-            logger.d("Deleted entity with ID %d", id);
+            this.logger.d("Deleted entity with ID %d", id);
         } catch (SQLException e) {
-            logger.w("Failed to delete entity with ID %d", id);
+            this.logger.w("Failed to delete entity with ID %d", id);
             throw e;
         } finally {
             this.pm.close();

@@ -12,4 +12,6 @@
     </style>
     <style name="GuessText" parent="@style/DefaultText">
     </style>
+    <style name="PlayerText" parent="@style/DefaultText">
+    </style>
 </resources>

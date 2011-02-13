@@ -14,6 +14,6 @@ public class PlayerDao extends NumbersDao {
 
     @Override
     public String[] getColumns() {
-        return new String[] { "id", "name" };
+        return new String[] { "id", "guid", "name" };
     }
 }

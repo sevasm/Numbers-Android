@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    <TextView android:layout_width="fill_parent"
-        android:layout_height="wrap_content" android:text="@string/player_select" />
-    <ListView android:id="@+id/playerList"
-        android:layout_width="wrap_content" android:layout_height="wrap_content"
-        android:layout_gravity="fill"  android:layout_weight="1.0"/>
-    <TextView android:layout_width="fill_parent"
-        android:layout_height="wrap_content" android:text="@string/player_create" />
-    <LinearLayout android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-        <EditText android:id="@+id/playerName"
-            android:layout_width="fill_parent" android:layout_height="wrap_content"
-            android:layout_weight="0.5" />
-        <Button android:id="@+id/playerButton"
-            android:layout_width="fill_parent" android:layout_height="wrap_content"
-            android:layout_weight="1.0" android:text="@string/player_new" />
+<LinearLayout xmlns:a="http://schemas.android.com/apk/res/android"
+    a:orientation="vertical" a:layout_width="fill_parent"
+    a:layout_height="fill_parent">
+    <TextView a:layout_width="fill_parent" a:layout_height="wrap_content"
+        a:text="@string/player_select" />
+    <ListView a:id="@+id/playerList" a:layout_width="fill_parent"
+        a:layout_height="wrap_content" a:layout_gravity="fill"
+        a:layout_weight="1.0" />
+    <TextView a:layout_width="fill_parent" a:layout_height="wrap_content"
+        a:text="@string/player_create" />
+    <LinearLayout a:layout_width="fill_parent"
+        a:layout_height="wrap_content">
+        <EditText a:id="@+id/playerName" a:layout_width="fill_parent"
+            a:layout_height="wrap_content" a:layout_weight="0.5" />
+        <Button a:id="@+id/playerButton" a:layout_width="fill_parent"
+            a:layout_height="wrap_content" a:layout_weight="1.0"
+            a:text="@string/player_new" />
     </LinearLayout>
 </LinearLayout>
