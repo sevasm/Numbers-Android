@@ -9,7 +9,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final Logger logger = new Logger(
             DatabaseHelper.class.getName());
 
-    private static final int DATABASE_VERSION = 4;
+    private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "numbers";
 
     private static final String PLAYERS_CREATE_Q = "CREATE TABLE players "
@@ -22,6 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String STATS_CREATE_Q = "CREATE TABLE stats "
             + "(id INTEGER PRIMARY KEY AUTOINCREMENT, player_id INTEGER, "
             + "games_played INTEGER, games_won INTEGER, games_drawn INTEGER, "
+            + "correct_guesses INTEGER, average_guesses INTEGER, "
             + "FOREIGN KEY (player_id) REFERENCES players(id))";
     private static final String STATS_DROP_Q = "DROP TABLE IF EXISTS stats";
     private static final String STATS_UNQ_Q = "CREATE UNIQUE INDEX "

@@ -3,9 +3,12 @@ package lt.ltech.numbers.android;
 import java.util.List;
 import java.util.UUID;
 
+import lt.ltech.numbers.android.entity.Stats;
 import lt.ltech.numbers.android.log.Logger;
 import lt.ltech.numbers.android.persistence.PlayerDao;
+import lt.ltech.numbers.android.persistence.StatsDao;
 import lt.ltech.numbers.android.persistence.mapping.PlayerMapper;
+import lt.ltech.numbers.android.persistence.mapping.StatsMapper;
 import lt.ltech.numbers.player.Player;
 import android.app.Activity;
 import android.content.Intent;
@@ -38,7 +41,11 @@ public class SelectPlayerActivity extends Activity {
         this.playerList.setOnItemClickListener(this.getOnItemClickListener());
 
         this.players = new PlayerDao(this).findAll(new PlayerMapper());
+        StatsDao statsDao = new StatsDao(this);
         for (Player player: this.players) {
+            Stats stats = statsDao.findByPlayer(player);
+            logger.i("%s: %d/%d (%d)", player, stats.getGamesPlayed(),
+                    stats.getGamesWon(), stats.getAverageGuesses());
             adapter.add(player);
         }
 
@@ -76,6 +83,14 @@ public class SelectPlayerActivity extends Activity {
                     PlayerMapper pm = new PlayerMapper();
                     Long id = dao.insert(player, pm);
                     player = dao.findById(id, pm);
+                    Stats stats = new Stats();
+                    stats.setPlayerId(player.getId());
+                    stats.setGamesPlayed(0);
+                    stats.setGamesWon(0);
+                    stats.setGamesDrawn(0);
+                    stats.setCorrectGuesses(0);
+                    StatsDao statsDao = new StatsDao(activity);
+                    statsDao.insert(stats, new StatsMapper());
                     logger.d("Created %s", player);
                     Intent result = new Intent();
                     result.putExtra("player", player);

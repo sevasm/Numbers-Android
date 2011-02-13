@@ -18,13 +18,14 @@ public abstract class NumbersDao {
         this.pm = new DatabaseHelper(context);
     }
 
-    public synchronized <E> List<E> findAll(EntityMapper<E> mapper) {
+    public synchronized <E> List<E> findBySelection(EntityMapper<E> mapper,
+            String selection, String... selectionArgs) {
         List<E> entities = new ArrayList<E>();
         Cursor c = null;
         try {
             SQLiteDatabase database = this.pm.getWritableDatabase();
-            c = database.query(this.getTableName(), this.getColumns(), null,
-                    null, null, null, null);
+            c = database.query(this.getTableName(), this.getColumns(),
+                    selection, selectionArgs, null, null, null);
             while (c.moveToNext()) {
                 E entity = mapper.mapRow(c);
                 this.logger.d("Retrieved %s", entity);
@@ -32,7 +33,7 @@ public abstract class NumbersDao {
             }
             this.logger.d("Retrieved %d entities", entities.size());
         } catch (SQLException e) {
-            this.logger.w("Failed to find all entities");
+            this.logger.w("Failed to find entities");
             throw e;
         } finally {
             if (c != null) {
@@ -43,24 +44,15 @@ public abstract class NumbersDao {
         return entities;
     }
 
+    public synchronized <E> List<E> findAll(EntityMapper<E> mapper) {
+        return this.findBySelection(mapper, null, (String[]) null);
+    }
+
     public synchronized <E> E findById(Long id, EntityMapper<E> mapper) {
+        List<E> list = this.findBySelection(mapper, "id = ?", id.toString());
         E entity = null;
-        Cursor c = null;
-        try {
-            SQLiteDatabase database = this.pm.getWritableDatabase();
-            c = database.query(this.getTableName(), this.getColumns(),
-                    "id = ?", new String[] { id.toString() }, null, null, null);
-            c.moveToFirst();
-            entity = mapper.mapRow(c);
-            this.logger.d("Retrieved %s with ID %d", entity, id);
-        } catch (SQLException e) {
-            this.logger.w("Found entity with ID %d", id);
-            throw e;
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-            this.pm.close();
+        if (list.size() > 0) {
+            entity = list.get(0);
         }
         return entity;
     }
@@ -79,6 +71,22 @@ public abstract class NumbersDao {
             this.pm.close();
         }
         return id;
+    }
+
+    public synchronized <E> void update(E entity, Long id,
+            EntityMapper<E> mapper) {
+        try {
+            SQLiteDatabase database = this.pm.getWritableDatabase();
+            database.update(this.getTableName(),
+                    mapper.toContentValues(entity), "id = ?",
+                    new String[] { id.toString() });
+            this.logger.d("Updated %s with ID %d", entity, id);
+        } catch (SQLException e) {
+            this.logger.w("Failed to update %s", entity);
+            throw e;
+        } finally {
+            this.pm.close();
+        }
     }
 
     public synchronized <E> void deleteById(Long id) {
