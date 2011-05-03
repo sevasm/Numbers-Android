@@ -57,6 +57,16 @@ public abstract class NumbersDao {
         return entity;
     }
 
+    public synchronized <E> E insertOrUpdate(E entity, Long id,
+            EntityMapper<E> mapper) {
+        if (id == null || this.findById(id, mapper) == null) {
+            id = this.insert(entity, mapper);
+        } else {
+            this.update(entity, id, mapper);
+        }
+        return this.findById(id, mapper);
+    }
+
     public synchronized <E> Long insert(E entity, EntityMapper<E> mapper) {
         Long id = null;
         try {

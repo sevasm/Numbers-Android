@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import lt.ltech.numbers.GameException;
 import lt.ltech.numbers.android.entity.Stats;
+import lt.ltech.numbers.android.game.GameType;
 import lt.ltech.numbers.android.log.Logger;
 import lt.ltech.numbers.android.persistence.StatsDao;
 import lt.ltech.numbers.android.persistence.mapping.StatsMapper;
@@ -16,12 +17,14 @@ import lt.ltech.numbers.game.GameStep;
 import lt.ltech.numbers.game.Number;
 import lt.ltech.numbers.game.Round;
 import lt.ltech.numbers.player.ArtificialPlayer;
+import lt.ltech.numbers.player.DefaultPlayer;
 import lt.ltech.numbers.player.Player;
-import lt.ltech.numbers.player.RandomPlayer;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -33,6 +36,8 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class GameActivity extends Activity {
+    public static final String PLAYER = "player";
+    public static final String GAME_TYPE = "gameType";
     private static final String GAME_STATE = "gameState";
     private static final String HUMAN_PLAYER = "humanPlayer";
     private static final String COMPUTER_PLAYER = "computerPlayer";
@@ -43,6 +48,7 @@ public class GameActivity extends Activity {
             GameActivity.class.getName());
 
     private ScrollView scrollView;
+    private LinearLayout playerColumns;
     private LinearLayout guessListLeft;
     private LinearLayout guessListRight;
     private LinearLayout lowerButtonLayout;
@@ -51,8 +57,10 @@ public class GameActivity extends Activity {
     private Button[] buttonArray;
     private Button clearButton;
     private EditText guessText;
+    private TextView hintText;
 
     private GameState gameState;
+    private GameType gameType;
 
     private Player humanPlayer;
     private Player computerPlayer;
@@ -65,6 +73,7 @@ public class GameActivity extends Activity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(GAME_STATE, this.gameState);
+        outState.putSerializable(GAME_TYPE, this.gameType);
         outState.putSerializable(HUMAN_PLAYER, this.humanPlayer);
         outState.putSerializable(COMPUTER_PLAYER, this.computerPlayer);
         outState.putSerializable(ARTIFICIAL_PLAYERS, this.artificialPlayers);
@@ -78,10 +87,26 @@ public class GameActivity extends Activity {
         this.guessButton = (Button) this.findViewById(R.id.gameGuessButton);
 
         this.scrollView = (ScrollView) this.findViewById(R.id.scrollView);
-        this.guessListLeft = (LinearLayout) this
-                .findViewById(R.id.guessListLeft);
-        this.guessListRight = (LinearLayout) this
-                .findViewById(R.id.guessListRight);
+        this.playerColumns = (LinearLayout) this
+                .findViewById(R.id.playerColumns);
+
+        LayoutInflater inflater = (LayoutInflater) this
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        this.guessListLeft = (LinearLayout) inflater.inflate(
+                R.layout.player_column, null);
+        this.guessListLeft.setLayoutParams(new LayoutParams(
+                LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1));
+        this.playerColumns.addView(this.guessListLeft, 0);
+
+        this.guessListRight = (LinearLayout) inflater.inflate(
+                R.layout.player_column, null);
+        this.guessListRight.setLayoutParams(new LayoutParams(
+                LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1));
+        this.playerColumns.addView(this.guessListRight, 1);
+
+        this.hintText = (TextView) this.findViewById(R.id.hintText);
+
         this.guessText = (EditText) this.findViewById(R.id.guessText);
         this.guessText.setEnabled(false);
         this.guessText.setClickable(false);
@@ -125,6 +150,7 @@ public class GameActivity extends Activity {
 
         if (savedState != null) {
             this.gameState = (GameState) savedState.getSerializable(GAME_STATE);
+            this.gameType = (GameType) savedState.getSerializable(GAME_TYPE);
             this.humanPlayer = (Player) savedState
                     .getSerializable(HUMAN_PLAYER);
             this.computerPlayer = (Player) savedState
@@ -166,14 +192,17 @@ public class GameActivity extends Activity {
 
     private void startNewGame() {
         this.gameState = new GameState();
-        this.humanPlayer = (Player) this.getIntent().getExtras()
-                .getSerializable("player");
+
+        Bundle extras = this.getIntent().getExtras();
+        this.gameType = (GameType) extras.getSerializable(GAME_TYPE);
+        this.humanPlayer = (Player) extras.getSerializable(PLAYER);
 
         this.computerPlayer = new Player(UUID.randomUUID(), "Computer player");
         this.computerPlayer.setId(2l);
 
         this.artificialPlayers = new HashMap<Player, ArtificialPlayer>();
-        this.artificialPlayers.put(this.computerPlayer, new RandomPlayer());
+        this.artificialPlayers.put(this.computerPlayer, new DefaultPlayer(
+                this.computerPlayer));
 
         try {
             this.gameState.addPlayer(humanPlayer);
@@ -181,6 +210,8 @@ public class GameActivity extends Activity {
         } catch (GameException ge) {
             logger.e(ge.getMessage());
         }
+
+        this.updateHint();
     }
 
     private void resumeGame() {
@@ -209,6 +240,8 @@ public class GameActivity extends Activity {
                 }
             }
         }
+
+        this.updateHint();
     }
 
     private OnClickListener getOnClickListener() {
@@ -223,9 +256,9 @@ public class GameActivity extends Activity {
                 Number guess = null;
                 try {
                     String[] splitLine = text.split("");
-                    Byte[] guessArray = new Byte[splitLine.length - 1];
+                    Integer[] guessArray = new Integer[splitLine.length - 1];
                     for (int i = 1; i < splitLine.length; i++) {
-                        guessArray[i - 1] = Byte.valueOf(splitLine[i]);
+                        guessArray[i - 1] = Integer.valueOf(splitLine[i]);
                     }
                     guess = new Number(Arrays.asList(guessArray));
                 } catch (NumberFormatException nfe) {
@@ -276,30 +309,16 @@ public class GameActivity extends Activity {
                 a.callArtifialPlayers();
 
                 if (a.isGameOver()) {
-                    AlertDialog.Builder b = new AlertDialog.Builder(a);
                     Player winner = a.gameState.getWinner();
-                    StatsDao statsDao = new StatsDao(a);
-                    Stats stats = statsDao.findByPlayer(winner);
-                    stats.setGamesPlayed(stats.getGamesPlayed() + 1);
-                    stats.setGamesWon(stats.getGamesWon() + 1);
-                    Integer correctGuesses = stats.getCorrectGuesses();
-                    Integer averageGuesses = stats.getAverageGuesses();
-                    int guessCount = a.gameState.getRounds().size();
-                    if (averageGuesses == null) {
-                        averageGuesses = guessCount;
-                        correctGuesses++;
-                    } else {
-                        averageGuesses = ((averageGuesses * correctGuesses++) + guessCount)
-                                / correctGuesses;
-                    }
-                    stats.setCorrectGuesses(correctGuesses);
-                    stats.setAverageGuesses(averageGuesses);
-                    statsDao.update(stats, stats.getId(), new StatsMapper());
+
+                    updateStats(a.humanPlayer, a.humanPlayer.equals(winner),
+                            false);
+
+                    AlertDialog.Builder b = new AlertDialog.Builder(a);
                     int turns = a.gameState.getRounds().size();
                     b.setTitle("Game Over");
-                    b.setMessage(String.format(
-                            "The game is over. %s has won in %d turns", winner,
-                            turns));
+                    String message = a.getString(R.string.game_winner);
+                    b.setMessage(String.format(message, winner.getName(), turns));
                     b.setNeutralButton(getString(R.string.ok),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,
@@ -311,6 +330,29 @@ public class GameActivity extends Activity {
                 }
             }
         };
+    }
+
+    private void updateStats(Player player, boolean isWinner, boolean isDraw) {
+        StatsDao statsDao = new StatsDao(this);
+        Stats stats = statsDao.findByPlayer(player);
+        stats.setGamesPlayed(stats.getGamesPlayed() + 1);
+        if (isWinner) {
+            stats.setGamesWon(stats.getGamesWon() + 1);
+        }
+        if (isDraw) {
+            stats.setGamesDrawn(stats.getGamesDrawn() + 1);
+        }
+        int averageGuesses = stats.getAverageGuesses();
+        int correctGuesses = stats.getCorrectGuesses();
+        if (isWinner || isDraw) {
+            int guessCount = this.gameState.getRounds().size();
+            int totalGuesses = averageGuesses * correctGuesses + guessCount;
+            correctGuesses++;
+            averageGuesses = totalGuesses / correctGuesses;
+            stats.setCorrectGuesses(correctGuesses);
+            stats.setAverageGuesses(averageGuesses);
+        }
+        statsDao.update(stats, stats.getId(), new StatsMapper());
     }
 
     private void callArtifialPlayers() {
@@ -325,11 +367,12 @@ public class GameActivity extends Activity {
                         this.gameState.setNumber(p, ap.inventNumber());
                         logger.i("%s has chosen %s", this.computerPlayer,
                                 this.computerPlayer.getNumber());
-                        String secretNumber = "";
+                        StringBuilder secretNumber = new StringBuilder();
                         for (int i = 0; i < GameConfiguration.numberLength(); i++) {
-                            secretNumber += "?";
+                            secretNumber.append("?");
                         }
                         this.numberRight.setText(secretNumber);
+                        this.updateHint();
                     } catch (GameException ge) {
                         logger.d(ge.getMessage());
                     }
@@ -406,6 +449,15 @@ public class GameActivity extends Activity {
                 this.guessText.setText("");
                 setButtonsEnabled(true);
             }
+        }
+    }
+
+    private void updateHint() {
+        GameStep.Type type = this.gameState.getGameStep().type();
+        if (type == GameStep.Type.SET_NUMBER) {
+            this.hintText.setText(R.string.hint_number);
+        } else if (type == GameStep.Type.GUESS) {
+            this.hintText.setText(R.string.hint_guess);
         }
     }
 

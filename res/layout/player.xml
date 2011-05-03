@@ -3,12 +3,12 @@
     a:orientation="vertical" a:layout_width="fill_parent"
     a:layout_height="fill_parent">
     <TextView a:layout_width="fill_parent" a:layout_height="wrap_content"
-        a:text="@string/player_select" />
+        a:text="@string/player_select" style="@style/DefaultText"/>
     <ListView a:id="@+id/playerList" a:layout_width="fill_parent"
         a:layout_height="wrap_content" a:layout_gravity="fill"
         a:layout_weight="1.0" />
     <TextView a:layout_width="fill_parent" a:layout_height="wrap_content"
-        a:text="@string/player_create" />
+        a:text="@string/player_create" style="@style/DefaultText"/>
     <LinearLayout a:layout_width="fill_parent"
         a:layout_height="wrap_content">
         <EditText a:id="@+id/playerName" a:layout_width="fill_parent"

@@ -3,8 +3,13 @@
     android:orientation="vertical" android:layout_width="fill_parent"
     android:layout_height="wrap_content">
     <TextView android:id="@+id/menuWelcomeText"
+        android:layout_width="fill_parent" android:layout_height="wrap_content"
+        style="@style/DefaultText" />
+    <TextView android:id="@+id/menuWelcomeHintText"
         android:layout_width="fill_parent" android:layout_height="wrap_content" />
     <Button android:id="@+id/menuNewGameButton" android:text="@string/menu_new_game"
+        android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    <Button android:id="@+id/menuPracticeButton" android:text="@string/menu_practice"
         android:layout_width="fill_parent" android:layout_height="wrap_content" />
     <Button android:id="@+id/menuChangePlayerButton"
         android:text="@string/menu_change_player" android:layout_width="fill_parent"

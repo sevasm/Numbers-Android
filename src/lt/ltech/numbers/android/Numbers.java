@@ -2,6 +2,7 @@ package lt.ltech.numbers.android;
 
 import java.util.List;
 
+import lt.ltech.numbers.android.game.GameType;
 import lt.ltech.numbers.android.log.Logger;
 import lt.ltech.numbers.android.persistence.PlayerDao;
 import lt.ltech.numbers.android.persistence.mapping.PlayerMapper;
@@ -37,6 +38,9 @@ public class Numbers extends Activity {
         Button newGameButton = (Button) this
                 .findViewById(R.id.menuNewGameButton);
         newGameButton.setOnClickListener(this.getNewGameListener());
+        Button practiceButton = (Button) this
+                .findViewById(R.id.menuPracticeButton);
+        practiceButton.setOnClickListener(this.getPracticeListener());
         Button changePlayerButton = (Button) this
                 .findViewById(R.id.menuChangePlayerButton);
         changePlayerButton.setOnClickListener(this.getSelectPlayerListener());
@@ -48,7 +52,21 @@ public class Numbers extends Activity {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(context, GameActivity.class);
-                i.putExtra("player", context.player);
+                i.putExtra(GameActivity.PLAYER, context.player);
+                i.putExtra(GameActivity.GAME_TYPE, GameType.VS_COMPUTER);
+                context.startActivity(i);
+            }
+        };
+    }
+
+    private OnClickListener getPracticeListener() {
+        final Numbers context = this;
+        return new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, GameActivity.class);
+                i.putExtra(GameActivity.PLAYER, context.player);
+                i.putExtra(GameActivity.GAME_TYPE, GameType.PRACTICE);
                 context.startActivity(i);
             }
         };
@@ -67,12 +85,9 @@ public class Numbers extends Activity {
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        logger.d("Select player activity requestCode: %d; resultCode: %d",
-                requestCode, resultCode);
         if (requestCode == RC_SELECT_PLAYER || resultCode == RC_SELECT_PLAYER) {
             if (resultCode == RESULT_OK) {
                 this.player = (Player) data.getSerializableExtra("player");
-                logger.d("Received %s from activity", this.player);
                 this.setWelcomeMessage();
             }
         }
@@ -81,6 +96,9 @@ public class Numbers extends Activity {
     private void setWelcomeMessage() {
         TextView tv = (TextView) this.findViewById(R.id.menuWelcomeText);
         tv.setText(String.format(this.getString(R.string.menu_welcome),
+                this.player.getName()));
+        TextView hint = (TextView) this.findViewById(R.id.menuWelcomeHintText);
+        hint.setText(String.format(this.getString(R.string.menu_welcome_hint),
                 this.player.getName()));
     }
 }

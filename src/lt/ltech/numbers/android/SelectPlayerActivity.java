@@ -35,18 +35,14 @@ public class SelectPlayerActivity extends Activity {
         this.setContentView(R.layout.player);
 
         this.playerList = (ListView) this.findViewById(R.id.playerList);
-        ArrayAdapter<Player> adapter = new ArrayAdapter<Player>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
                 R.layout.player_view);
         this.playerList.setAdapter(adapter);
         this.playerList.setOnItemClickListener(this.getOnItemClickListener());
 
         this.players = new PlayerDao(this).findAll(new PlayerMapper());
-        StatsDao statsDao = new StatsDao(this);
         for (Player player: this.players) {
-            Stats stats = statsDao.findByPlayer(player);
-            logger.i("%s: %d/%d (%d)", player, stats.getGamesPlayed(),
-                    stats.getGamesWon(), stats.getAverageGuesses());
-            adapter.add(player);
+            adapter.add(player.getName());
         }
 
         this.nameText = (TextView) this.findViewById(R.id.playerName);

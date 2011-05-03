@@ -19,7 +19,20 @@ public class StatsDao extends NumbersDao {
         if (list.size() > 0) {
             stats = list.get(0);
         }
+        if (stats == null) {
+            stats = new Stats();
+            stats.setPlayerId(player.getId());
+            stats.setGamesPlayed(0);
+            stats.setGamesWon(0);
+            stats.setGamesDrawn(0);
+            stats.setCorrectGuesses(0);
+            stats.setAverageGuesses(0);
+        }
         return stats;
+    }
+
+    public void saveStats(Stats stats) {
+        this.insertOrUpdate(stats, stats.getId(), new StatsMapper());
     }
 
     @Override

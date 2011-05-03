@@ -1,6 +1,8 @@
 package lt.ltech.numbers.android.entity;
 
-public class Stats {
+import lt.ltech.numbers.android.persistence.BasicEntity;
+
+public class Stats extends BasicEntity {
     private Long id;
     private Long playerId;
     private Integer gamesPlayed;
@@ -63,6 +65,11 @@ public class Stats {
 
     public void setAverageGuesses(Integer averageGuesses) {
         this.averageGuesses = averageGuesses;
+    }
+
+    public String toString() {
+        return String.format("%3d %3d %3d %3d %3d %3d", gamesPlayed, gamesWon,
+                gamesDrawn, getGamesLost(), correctGuesses, averageGuesses);
     }
 
     public Integer getGamesLost() {
