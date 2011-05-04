@@ -158,10 +158,11 @@ public class GameActivity extends Activity {
             this.artificialPlayers = (HashMap<Player, ArtificialPlayer>) savedState
                     .getSerializable(ARTIFICIAL_PLAYERS);
             boolean gsnn = this.gameState != null;
+            boolean gtnn = this.gameType != null;
             boolean hpnn = this.humanPlayer != null;
             boolean cpnn = this.computerPlayer != null;
             boolean apnn = this.artificialPlayers != null;
-            if (gsnn && hpnn && cpnn && apnn) {
+            if (gsnn && gtnn && hpnn && cpnn && apnn) {
                 boolean cpap = this.artificialPlayers.get(this.computerPlayer) != null;
                 boolean hpgs = this.gameState.containsPlayer(this.humanPlayer);
                 boolean cpgs = this.gameState
@@ -397,9 +398,11 @@ public class GameActivity extends Activity {
         tv.setTextAppearance(this, R.style.GuessText);
         tv.setText(String.format("%s %s", guess, answer));
         ll.addView(tv);
-        this.scrollView.fullScroll(View.FOCUS_DOWN);
-        // TODO make the scroll view scroll all the way to the
-        // bottom
+        this.scrollView.post(new Runnable() {
+            public void run() {
+                GameActivity.this.scrollView.fullScroll(View.FOCUS_DOWN);
+            }
+        });
     }
 
     private OnClickListener getButtonOnClickListener(final int buttonNumber) {
