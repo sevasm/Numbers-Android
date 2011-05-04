@@ -49,12 +49,12 @@ public class GameActivity extends Activity {
 
     private ScrollView scrollView;
     private LinearLayout playerColumns;
-    private LinearLayout guessListLeft;
-    private LinearLayout guessListRight;
+    private LinearLayout columnLeft;
+    private LinearLayout columnRight;
     private LinearLayout lowerButtonLayout;
     private LinearLayout upperButtonLayout;
     private Button guessButton;
-    private Button[] buttonArray;
+    private Button[] buttons;
     private Button clearButton;
     private EditText guessText;
     private TextView hintText;
@@ -72,142 +72,115 @@ public class GameActivity extends Activity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(GAME_STATE, this.gameState);
-        outState.putSerializable(GAME_TYPE, this.gameType);
-        outState.putSerializable(HUMAN_PLAYER, this.humanPlayer);
-        outState.putSerializable(COMPUTER_PLAYER, this.computerPlayer);
-        outState.putSerializable(ARTIFICIAL_PLAYERS, this.artificialPlayers);
-        outState.putString(GUESS_TEXT, this.guessText.getText().toString());
+        outState.putSerializable(GAME_STATE, gameState);
+        outState.putSerializable(GAME_TYPE, gameType);
+        outState.putSerializable(HUMAN_PLAYER, humanPlayer);
+        outState.putSerializable(COMPUTER_PLAYER, computerPlayer);
+        outState.putSerializable(ARTIFICIAL_PLAYERS, artificialPlayers);
+        outState.putString(GUESS_TEXT, guessText.getText().toString());
     }
 
     @Override
     public void onCreate(Bundle savedState) {
         super.onCreate(savedState);
-        this.setContentView(R.layout.game);
-        this.guessButton = (Button) this.findViewById(R.id.gameGuessButton);
+        setContentView(R.layout.game);
+        guessButton = (Button) findViewById(R.id.gameGuessButton);
 
-        this.scrollView = (ScrollView) this.findViewById(R.id.scrollView);
-        this.playerColumns = (LinearLayout) this
-                .findViewById(R.id.playerColumns);
+        scrollView = (ScrollView) findViewById(R.id.scrollView);
+        playerColumns = (LinearLayout) findViewById(R.id.playerColumns);
 
-        LayoutInflater inflater = (LayoutInflater) this
-                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inf = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutParams params = new LayoutParams(LayoutParams.FILL_PARENT,
+                LayoutParams.FILL_PARENT, 1.0f);
 
-        this.guessListLeft = (LinearLayout) inflater.inflate(
-                R.layout.player_column, null);
-        this.guessListLeft.setLayoutParams(new LayoutParams(
-                LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1));
-        this.playerColumns.addView(this.guessListLeft, 0);
+        columnLeft = (LinearLayout) inf.inflate(R.layout.player_column, null);
+        columnLeft.setLayoutParams(params);
+        playerColumns.addView(columnLeft);
 
-        this.guessListRight = (LinearLayout) inflater.inflate(
-                R.layout.player_column, null);
-        this.guessListRight.setLayoutParams(new LayoutParams(
-                LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT, 1));
-        this.playerColumns.addView(this.guessListRight, 1);
+        columnRight = (LinearLayout) inf.inflate(R.layout.player_column, null);
+        columnRight.setLayoutParams(params);
+        playerColumns.addView(columnRight);
 
-        this.hintText = (TextView) this.findViewById(R.id.hintText);
+        hintText = (TextView) findViewById(R.id.hintText);
 
-        this.guessText = (EditText) this.findViewById(R.id.guessText);
-        this.guessText.setEnabled(false);
-        this.guessText.setClickable(false);
-        this.guessText.setFocusable(false);
+        guessText = (EditText) findViewById(R.id.guessText);
+        guessText.setEnabled(false);
+        guessText.setClickable(false);
+        guessText.setFocusable(false);
 
-        this.guessButton.setOnClickListener(this.getOnClickListener());
+        guessButton.setOnClickListener(getOnClickListener());
 
-        this.upperButtonLayout = (LinearLayout) this
-                .findViewById(R.id.gameButtonLayoutUpper);
-        this.lowerButtonLayout = (LinearLayout) this
-                .findViewById(R.id.gameButtonLayoutLower);
+        upperButtonLayout = (LinearLayout) findViewById(R.id.gameButtonLayoutUpper);
+        lowerButtonLayout = (LinearLayout) findViewById(R.id.gameButtonLayoutLower);
 
-        this.buttonArray = new Button[10];
-        for (int i = 0; i < 5; i++) {
-            Button b = new Button(this);
-            b.setText(String.valueOf(i));
-            b.setOnClickListener(this.getButtonOnClickListener(i));
-            LayoutParams lp = new LayoutParams(
-                    ViewGroup.LayoutParams.FILL_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
-            this.upperButtonLayout.addView(b, lp);
-            this.buttonArray[i] = b;
-        }
+        buttons = new Button[10];
+        createButtons(upperButtonLayout, 0, 4);
+        createButtons(lowerButtonLayout, 5, 9);
 
-        for (int i = 5; i < 10; i++) {
-            Button b = new Button(this);
-            b.setText(String.valueOf(i));
-            b.setOnClickListener(this.getButtonOnClickListener(i));
-            LayoutParams lp = new LayoutParams(
-                    ViewGroup.LayoutParams.FILL_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
-            this.lowerButtonLayout.addView(b, lp);
-            this.buttonArray[i] = b;
-        }
+        clearButton = (Button) findViewById(R.id.gameClearButton);
+        clearButton.setOnClickListener(getClearOnClickListener());
 
-        this.clearButton = (Button) this.findViewById(R.id.gameClearButton);
-        this.clearButton.setOnClickListener(this.getClearOnClickListener());
-
-        this.numberLeft = (TextView) this.findViewById(R.id.gameNumberLeft);
-        this.numberRight = (TextView) this.findViewById(R.id.gameNumberRight);
+        numberLeft = (TextView) findViewById(R.id.gameNumberLeft);
+        numberRight = (TextView) findViewById(R.id.gameNumberRight);
 
         if (savedState != null) {
-            this.gameState = (GameState) savedState.getSerializable(GAME_STATE);
-            this.gameType = (GameType) savedState.getSerializable(GAME_TYPE);
-            this.humanPlayer = (Player) savedState
-                    .getSerializable(HUMAN_PLAYER);
-            this.computerPlayer = (Player) savedState
+            gameState = (GameState) savedState.getSerializable(GAME_STATE);
+            gameType = (GameType) savedState.getSerializable(GAME_TYPE);
+            humanPlayer = (Player) savedState.getSerializable(HUMAN_PLAYER);
+            computerPlayer = (Player) savedState
                     .getSerializable(COMPUTER_PLAYER);
-            this.artificialPlayers = (HashMap<Player, ArtificialPlayer>) savedState
+            artificialPlayers = (HashMap<Player, ArtificialPlayer>) savedState
                     .getSerializable(ARTIFICIAL_PLAYERS);
-            boolean gsnn = this.gameState != null;
-            boolean gtnn = this.gameType != null;
-            boolean hpnn = this.humanPlayer != null;
-            boolean cpnn = this.computerPlayer != null;
-            boolean apnn = this.artificialPlayers != null;
+            boolean gsnn = gameState != null;
+            boolean gtnn = gameType != null;
+            boolean hpnn = humanPlayer != null;
+            boolean cpnn = computerPlayer != null;
+            boolean apnn = artificialPlayers != null;
             if (gsnn && gtnn && hpnn && cpnn && apnn) {
-                boolean cpap = this.artificialPlayers.get(this.computerPlayer) != null;
-                boolean hpgs = this.gameState.containsPlayer(this.humanPlayer);
-                boolean cpgs = this.gameState
-                        .containsPlayer(this.computerPlayer);
+                boolean cpap = artificialPlayers.get(computerPlayer) != null;
+                boolean hpgs = gameState.containsPlayer(humanPlayer);
+                boolean cpgs = gameState.containsPlayer(computerPlayer);
                 if (cpap && hpgs && cpgs) {
-                    this.resumeGame();
+                    resumeGame();
                 } else {
-                    this.startNewGame();
+                    startNewGame();
                 }
             } else {
-                this.startNewGame();
+                startNewGame();
             }
 
             String guess = savedState.getString(GUESS_TEXT);
             if (guess != null) {
-                this.guessText.setText(guess);
-                this.resetButtonState();
+                guessText.setText(guess);
+                resetButtonState();
             }
         } else {
-            this.startNewGame();
+            startNewGame();
         }
 
-        ((TextView) this.findViewById(R.id.gameNameLeft))
-                .setText(this.humanPlayer.getName());
-        ((TextView) this.findViewById(R.id.gameNameRight))
-                .setText(this.computerPlayer.getName());
+        TextView humanPlayerName = (TextView) findViewById(R.id.gameNameLeft);
+        humanPlayerName.setText(humanPlayer.getName());
+        TextView computerPlayerName = (TextView) findViewById(R.id.gameNameRight);
+        computerPlayerName.setText(computerPlayer.getName());
     }
 
     private void startNewGame() {
-        this.gameState = new GameState();
+        gameState = new GameState();
 
-        Bundle extras = this.getIntent().getExtras();
-        this.gameType = (GameType) extras.getSerializable(GAME_TYPE);
-        this.humanPlayer = (Player) extras.getSerializable(PLAYER);
+        Bundle extras = getIntent().getExtras();
+        gameType = (GameType) extras.getSerializable(GAME_TYPE);
+        humanPlayer = (Player) extras.getSerializable(PLAYER);
 
-        this.computerPlayer = new Player(UUID.randomUUID(), "Computer player");
-        this.computerPlayer.setId(2l);
+        computerPlayer = new Player(UUID.randomUUID(), "Computer player");
+        computerPlayer.setId(2l);
 
-        this.artificialPlayers = new HashMap<Player, ArtificialPlayer>();
-        this.artificialPlayers.put(this.computerPlayer, new DefaultPlayer(
-                this.computerPlayer));
+        artificialPlayers = new HashMap<Player, ArtificialPlayer>();
+        ArtificialPlayer artificialPlayer = new DefaultPlayer(computerPlayer);
+        artificialPlayers.put(computerPlayer, artificialPlayer);
 
         try {
-            this.gameState.addPlayer(humanPlayer);
-            this.gameState.addPlayer(computerPlayer);
+            gameState.addPlayer(humanPlayer);
+            gameState.addPlayer(computerPlayer);
         } catch (GameException ge) {
             logger.e(ge.getMessage());
         }
@@ -216,27 +189,24 @@ public class GameActivity extends Activity {
     }
 
     private void resumeGame() {
-        if (this.humanPlayer.getNumber() != null) {
-            this.numberLeft.setText(this.humanPlayer.getNumber().toString());
-            this.guessButton.setText(this.getString(R.string.game_make_guess));
+        if (humanPlayer.getNumber() != null) {
+            numberLeft.setText(humanPlayer.getNumber().toString());
+            guessButton.setText(getString(R.string.game_make_guess));
 
-            if (this.computerPlayer.getNumber() != null) {
-                this.numberRight.setText(this.computerPlayer.getNumber()
-                        .toString());
+            if (computerPlayer.getNumber() != null) {
+                numberRight.setText(computerPlayer.getNumber().toString());
             } else {
-                this.callArtifialPlayers();
+                callArtifialPlayers();
             }
 
-            for (Round round: this.gameState.getRounds()) {
+            for (Round round: gameState.getRounds()) {
                 for (Player player: round.getAnswers().keySet()) {
                     Number guess = round.getGuesses().get(player);
                     Answer answer = round.getAnswers().get(player);
-                    if (player.equals(this.humanPlayer)) {
-                        this.addGuessAndAnswer(this.guessListLeft, guess,
-                                answer);
-                    } else if (player.equals(this.computerPlayer)) {
-                        this.addGuessAndAnswer(this.guessListRight, guess,
-                                answer);
+                    if (player.equals(humanPlayer)) {
+                        addGuessAndAnswer(columnLeft, guess, answer);
+                    } else if (player.equals(computerPlayer)) {
+                        addComputerGuessAndAnswer(guess, answer);
                     }
                 }
             }
@@ -247,8 +217,8 @@ public class GameActivity extends Activity {
 
     private OnClickListener getOnClickListener() {
         final GameActivity a = this;
-        final LinearLayout gl = this.guessListLeft;
-        final EditText gt = this.guessText;
+        final LinearLayout gl = columnLeft;
+        final EditText gt = guessText;
         return new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -346,7 +316,7 @@ public class GameActivity extends Activity {
         int averageGuesses = stats.getAverageGuesses();
         int correctGuesses = stats.getCorrectGuesses();
         if (isWinner || isDraw) {
-            int guessCount = this.gameState.getRounds().size();
+            int guessCount = gameState.getRounds().size();
             int totalGuesses = averageGuesses * correctGuesses + guessCount;
             correctGuesses++;
             averageGuesses = totalGuesses / correctGuesses;
@@ -359,37 +329,41 @@ public class GameActivity extends Activity {
     private void callArtifialPlayers() {
         Player p = null;
         ArtificialPlayer ap = null;
-        while ((ap = this.artificialPlayers.get(p = this.gameState
-                .getGameStep().player())) != null) {
-            final GameStep.Type t = this.gameState.getGameStep().type();
+        while ((ap = this.artificialPlayers.get(p = gameState.getGameStep()
+                .player())) != null) {
+            final GameStep.Type t = gameState.getGameStep().type();
             switch (t) {
                 case SET_NUMBER:
                     try {
-                        this.gameState.setNumber(p, ap.inventNumber());
-                        logger.i("%s has chosen %s", this.computerPlayer,
-                                this.computerPlayer.getNumber());
+                        gameState.setNumber(p, ap.inventNumber());
                         StringBuilder secretNumber = new StringBuilder();
                         for (int i = 0; i < GameConfiguration.numberLength(); i++) {
                             secretNumber.append("?");
                         }
-                        this.numberRight.setText(secretNumber);
-                        this.updateHint();
+                        numberRight.setText(secretNumber);
+                        updateHint();
                     } catch (GameException ge) {
-                        logger.d(ge.getMessage());
+                        logger.e(ge.getMessage());
                     }
                     break;
                 case GUESS:
                     try {
-                        Number g = ap.makeGuess(this.gameState);
-                        this.gameState.guess(p, g);
-                        Answer ans = this.gameState.getLastRound().getAnswers()
-                                .get(this.computerPlayer);
-                        this.addGuessAndAnswer(this.guessListRight, g, ans);
+                        Number g = ap.makeGuess(gameState);
+                        gameState.guess(p, g);
+                        Answer ans = gameState.getLastRound().getAnswers()
+                                .get(computerPlayer);
+                        addComputerGuessAndAnswer(g, ans);
                     } catch (GameException ge) {
-                        logger.d(ge.getMessage());
+                        logger.e(ge.getMessage());
                     }
                     break;
             }
+        }
+    }
+
+    private void addComputerGuessAndAnswer(Number guess, Answer answer) {
+        if (!isPractice()) {
+            addGuessAndAnswer(columnRight, guess, answer);
         }
     }
 
@@ -400,9 +374,22 @@ public class GameActivity extends Activity {
         ll.addView(tv);
         this.scrollView.post(new Runnable() {
             public void run() {
-                GameActivity.this.scrollView.fullScroll(View.FOCUS_DOWN);
+                scrollView.fullScroll(View.FOCUS_DOWN);
             }
         });
+    }
+
+    private void createButtons(LinearLayout view, int start, int end) {
+        for (int i = start; i <= end; i++) {
+            Button b = new Button(this);
+            b.setText(String.valueOf(i));
+            b.setOnClickListener(getButtonOnClickListener(i));
+            LayoutParams lp = new LayoutParams(
+                    ViewGroup.LayoutParams.FILL_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT, 1.0f);
+            view.addView(b, lp);
+            buttons[i] = b;
+        }
     }
 
     private OnClickListener getButtonOnClickListener(final int buttonNumber) {
@@ -412,7 +399,7 @@ public class GameActivity extends Activity {
             public void onClick(View v) {
                 String text = a.guessText.getText().toString();
                 a.guessText.setText(text + buttonNumber);
-                a.buttonArray[buttonNumber].setEnabled(false);
+                a.buttons[buttonNumber].setEnabled(false);
                 a.resetButtonState();
             }
         };
@@ -435,10 +422,10 @@ public class GameActivity extends Activity {
     private void resetButtonState() {
         String text = this.guessText.getText().toString();
         if (text.length() >= GameConfiguration.numberLength()) {
-            this.setButtonsEnabled(false);
+            setButtonsEnabled(false);
             return;
         } else {
-            this.setButtonsEnabled(true);
+            setButtonsEnabled(true);
         }
         for (String s: text.split("")) {
             if (s.equals("")) {
@@ -446,31 +433,35 @@ public class GameActivity extends Activity {
             }
             try {
                 int n = Integer.parseInt(s);
-                this.buttonArray[n].setEnabled(false);
+                buttons[n].setEnabled(false);
             } catch (NumberFormatException e) {
                 logger.d(e.getMessage());
-                this.guessText.setText("");
+                guessText.setText("");
                 setButtonsEnabled(true);
             }
         }
     }
 
     private void updateHint() {
-        GameStep.Type type = this.gameState.getGameStep().type();
+        GameStep.Type type = gameState.getGameStep().type();
         if (type == GameStep.Type.SET_NUMBER) {
-            this.hintText.setText(R.string.hint_number);
+            hintText.setText(R.string.hint_number);
         } else if (type == GameStep.Type.GUESS) {
-            this.hintText.setText(R.string.hint_guess);
+            hintText.setText(R.string.hint_guess);
         }
     }
 
     private void setButtonsEnabled(boolean enabled) {
-        for (Button b: this.buttonArray) {
+        for (Button b: buttons) {
             b.setEnabled(enabled);
         }
     }
 
     private boolean isGameOver() {
-        return this.gameState.isGameOver();
+        return gameState.isGameOver();
+    }
+
+    private boolean isPractice() {
+        return gameType == GameType.PRACTICE;
     }
 }
