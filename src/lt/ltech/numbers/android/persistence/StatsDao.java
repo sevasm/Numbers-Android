@@ -1,5 +1,6 @@
 package lt.ltech.numbers.android.persistence;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import lt.ltech.numbers.android.entity.Stats;
@@ -26,7 +27,7 @@ public class StatsDao extends NumbersDao {
             stats.setGamesWon(0);
             stats.setGamesDrawn(0);
             stats.setCorrectGuesses(0);
-            stats.setAverageGuesses(0);
+            stats.setAverageGuesses(BigDecimal.ZERO);
         }
         return stats;
     }

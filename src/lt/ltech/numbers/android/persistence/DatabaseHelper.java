@@ -22,7 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String STATS_CREATE_Q = "CREATE TABLE stats "
             + "(id INTEGER PRIMARY KEY AUTOINCREMENT, player_id INTEGER, "
             + "games_played INTEGER, games_won INTEGER, games_drawn INTEGER, "
-            + "correct_guesses INTEGER, average_guesses INTEGER, "
+            + "correct_guesses INTEGER, average_guesses REAL, "
             + "FOREIGN KEY (player_id) REFERENCES players(id))";
     private static final String STATS_DROP_Q = "DROP TABLE IF EXISTS stats";
     private static final String STATS_UNQ_Q = "CREATE UNIQUE INDEX "

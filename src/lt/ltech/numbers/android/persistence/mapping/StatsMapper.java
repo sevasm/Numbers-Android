@@ -1,5 +1,7 @@
 package lt.ltech.numbers.android.persistence.mapping;
 
+import java.math.BigDecimal;
+
 import lt.ltech.numbers.android.entity.Stats;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -14,7 +16,7 @@ public class StatsMapper implements EntityMapper<Stats> {
         values.put("games_won", entity.getGamesWon());
         values.put("games_drawn", entity.getGamesDrawn());
         values.put("correct_guesses", entity.getCorrectGuesses());
-        values.put("average_guesses", entity.getAverageGuesses());
+        values.put("average_guesses", entity.getAverageGuesses().toString());
         return values;
     }
 
@@ -28,7 +30,7 @@ public class StatsMapper implements EntityMapper<Stats> {
         stats.setGamesWon(cursor.getInt(i++));
         stats.setGamesDrawn(cursor.getInt(i++));
         stats.setCorrectGuesses(cursor.getInt(i++));
-        stats.setAverageGuesses(cursor.getInt(i++));
+        stats.setAverageGuesses(new BigDecimal(cursor.getString(i++)));
         return stats;
     }
 }

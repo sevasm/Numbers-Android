@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:a="http://schemas.android.com/apk/res/android"
     a:orientation="vertical" a:layout_width="fill_parent"
-    a:layout_height="fill_parent">
+    a:layout_height="fill_parent" style="@style/defaultBackground">
     <TextView a:layout_width="fill_parent" a:layout_height="wrap_content"
-        a:text="@string/player_select" style="@style/DefaultText"/>
+        a:text="@string/player_select" style="@style/TitleText" />
+    <View style="@style/SplitterHorizontal" />
     <ListView a:id="@+id/playerList" a:layout_width="fill_parent"
         a:layout_height="wrap_content" a:layout_gravity="fill"
         a:layout_weight="1.0" />
+    <View style="@style/SplitterHorizontal" />
     <TextView a:layout_width="fill_parent" a:layout_height="wrap_content"
-        a:text="@string/player_create" style="@style/DefaultText"/>
+        a:text="@string/player_create" style="@style/HintText" />
     <LinearLayout a:layout_width="fill_parent"
         a:layout_height="wrap_content">
         <EditText a:id="@+id/playerName" a:layout_width="fill_parent"

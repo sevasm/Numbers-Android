@@ -14,26 +14,34 @@ public final class R {
         public static final int icon=0x7f020000;
     }
     public static final class id {
-        public static final int gameButtonLayoutLower=0x7f06000b;
-        public static final int gameButtonLayoutUpper=0x7f06000a;
-        public static final int gameClearButton=0x7f060008;
-        public static final int gameGuessButton=0x7f060009;
+        public static final int gameButtonLayoutLower=0x7f06000c;
+        public static final int gameButtonLayoutUpper=0x7f06000b;
+        public static final int gameClearButton=0x7f060009;
+        public static final int gameGuessButton=0x7f06000a;
         public static final int gameNameLeft=0x7f060000;
         public static final int gameNameRight=0x7f060001;
-        public static final int gameNumberLeft=0x7f060002;
-        public static final int gameNumberRight=0x7f060003;
-        public static final int guessText=0x7f060007;
-        public static final int hintText=0x7f060006;
-        public static final int menuChangePlayerButton=0x7f060010;
-        public static final int menuNewGameButton=0x7f06000e;
-        public static final int menuPracticeButton=0x7f06000f;
-        public static final int menuWelcomeHintText=0x7f06000d;
-        public static final int menuWelcomeText=0x7f06000c;
-        public static final int playerButton=0x7f060013;
-        public static final int playerColumns=0x7f060005;
-        public static final int playerList=0x7f060011;
-        public static final int playerName=0x7f060012;
-        public static final int scrollView=0x7f060004;
+        public static final int gameNumberLeft=0x7f060003;
+        public static final int gameNumberRight=0x7f060004;
+        public static final int gameNumbers=0x7f060002;
+        public static final int guessText=0x7f060008;
+        public static final int hintText=0x7f060007;
+        public static final int menuChangePlayerButton=0x7f060012;
+        public static final int menuNewGameButton=0x7f06000f;
+        public static final int menuPracticeButton=0x7f060010;
+        public static final int menuStatisticsButton=0x7f060011;
+        public static final int menuWelcomeHintText=0x7f06000e;
+        public static final int menuWelcomeText=0x7f06000d;
+        public static final int playerButton=0x7f060015;
+        public static final int playerColumns=0x7f060006;
+        public static final int playerList=0x7f060013;
+        public static final int playerName=0x7f060014;
+        public static final int scrollView=0x7f060005;
+        public static final int statsAverage=0x7f06001b;
+        public static final int statsCorrect=0x7f06001a;
+        public static final int statsLost=0x7f060019;
+        public static final int statsPlayed=0x7f060017;
+        public static final int statsPlayerText=0x7f060016;
+        public static final int statsWon=0x7f060018;
     }
     public static final class layout {
         public static final int game=0x7f030000;
@@ -41,31 +49,54 @@ public final class R {
         public static final int player=0x7f030002;
         public static final int player_column=0x7f030003;
         public static final int player_view=0x7f030004;
+        public static final int splitter_vertical=0x7f030005;
+        public static final int statistics=0x7f030006;
     }
     public static final class string {
         public static final int app_name=0x7f040001;
-        public static final int game_make_guess=0x7f040008;
-        public static final int game_set_number=0x7f040009;
-        public static final int game_winner=0x7f04000f;
+        public static final int game_make_guess=0x7f040009;
+        public static final int game_set_number=0x7f04000a;
+        public static final int game_winner_computer=0x7f040011;
+        public static final int game_winner_player=0x7f040010;
         public static final int hello=0x7f040000;
-        public static final int hint_guess=0x7f04000d;
-        public static final int hint_number=0x7f04000c;
-        public static final int menu_change_player=0x7f040004;
+        public static final int hint_guess=0x7f04000e;
+        public static final int hint_number=0x7f04000d;
+        public static final int menu_change_player=0x7f040005;
         public static final int menu_new_game=0x7f040002;
-        public static final int menu_practice=0x7f04000b;
+        public static final int menu_practice=0x7f04000c;
+        public static final int menu_statistcs=0x7f040004;
         public static final int menu_welcome=0x7f040003;
-        public static final int menu_welcome_hint=0x7f04000e;
-        public static final int ok=0x7f04000a;
-        public static final int player_create=0x7f040006;
-        public static final int player_new=0x7f040007;
-        public static final int player_select=0x7f040005;
+        public static final int menu_welcome_hint=0x7f04000f;
+        public static final int ok=0x7f04000b;
+        public static final int player_create=0x7f040007;
+        public static final int player_new=0x7f040008;
+        public static final int player_select=0x7f040006;
+        public static final int stats_average=0x7f040017;
+        public static final int stats_correct=0x7f040016;
+        public static final int stats_lost=0x7f040015;
+        public static final int stats_played=0x7f040013;
+        public static final int stats_player=0x7f040012;
+        public static final int stats_won=0x7f040014;
     }
     public static final class style {
-        public static final int DefaultText=0x7f050000;
-        public static final int GuessText=0x7f050003;
-        public static final int HintText=0x7f050005;
-        public static final int NameText=0x7f050001;
-        public static final int NumberText=0x7f050002;
-        public static final int PlayerText=0x7f050004;
+        public static final int DefaultRow=0x7f05000b;
+        public static final int DefaultTable=0x7f05000a;
+        /** item name="android:paddingTop">2dip</item>
+        <item name="android:paddingRight">4dip</item>
+        <item name="android:paddingBottom">2dip</item>
+        <item name="android:paddingLeft">4dip</item
+         */
+        public static final int DefaultText=0x7f050001;
+        public static final int GuessText=0x7f050006;
+        public static final int HintText=0x7f050007;
+        public static final int NameText=0x7f050004;
+        public static final int NumberText=0x7f050005;
+        public static final int PlayerText=0x7f050008;
+        public static final int SplitterHorizontal=0x7f05000c;
+        public static final int SplitterVertical=0x7f05000d;
+        public static final int StatisticsText=0x7f050009;
+        public static final int SubTitleText=0x7f050003;
+        public static final int TitleText=0x7f050002;
+        public static final int defaultBackground=0x7f050000;
     }
 }

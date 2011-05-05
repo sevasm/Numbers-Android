@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:a="http://schemas.android.com/apk/res/android"
+    a:orientation="vertical" a:layout_width="fill_parent"
+    a:layout_height="fill_parent" style="@style/defaultBackground">
+    <TextView a:id="@+id/statsPlayerText" a:layout_width="fill_parent"
+        a:layout_height="wrap_content" style="@style/TitleText" />
+    <View style="@style/SplitterHorizontal" />
+    <TextView a:text="Game statistics" a:layout_width="fill_parent"
+        a:layout_height="wrap_content" style="@style/SubTitleText" />
+    <View style="@style/SplitterHorizontal" />
+    <TableLayout a:layout_width="fill_parent"
+        a:layout_height="wrap_content" a:stretchColumns="*"
+        style="@style/DefaultTable">
+        <TableRow style="@style/DefaultRow" a:baselineAligned="false">
+            <TextView a:text="@string/stats_played" style="@style/StatisticsText" />
+            <TextView a:id="@+id/statsPlayed" a:gravity="right"
+                style="@style/StatisticsText" a:textSize="22dip" />
+        </TableRow>
+        <TableRow style="@style/DefaultRow" a:baselineAligned="false">
+            <TextView a:text="@string/stats_won" style="@style/StatisticsText" />
+            <TextView a:id="@+id/statsWon" a:gravity="right"
+                style="@style/StatisticsText" a:textSize="22dip" />
+        </TableRow>
+        <TableRow style="@style/DefaultRow" a:baselineAligned="false">
+            <TextView a:text="@string/stats_lost" style="@style/StatisticsText" />
+            <TextView a:id="@+id/statsLost" a:gravity="right"
+                style="@style/StatisticsText" a:textSize="22dip" />
+        </TableRow>
+    </TableLayout>
+    <View style="@style/SplitterHorizontal" />
+    <TextView a:text="Other statistics" a:layout_width="fill_parent"
+        a:layout_height="wrap_content" style="@style/SubTitleText" />
+    <View style="@style/SplitterHorizontal" />
+    <TableLayout a:layout_width="fill_parent"
+        a:layout_height="fill_parent" a:stretchColumns="*"
+        a:shrinkColumns="0" style="@style/DefaultTable">
+        <TableRow style="@style/DefaultRow" a:baselineAligned="false">
+            <TextView a:text="@string/stats_correct" style="@style/StatisticsText"
+                a:gravity="left|center_vertical" />
+            <TextView a:id="@+id/statsCorrect" a:gravity="right|center_vertical"
+                style="@style/StatisticsText" a:textSize="22dip" />
+        </TableRow>
+        <TableRow style="@style/DefaultRow" a:baselineAligned="false">
+            <TextView a:text="@string/stats_average" style="@style/StatisticsText"
+                a:gravity="left|center_vertical" />
+            <TextView a:id="@+id/statsAverage" a:gravity="right|center_vertical"
+                style="@style/StatisticsText" a:textSize="22dip" />
+        </TableRow>
+    </TableLayout>
+</LinearLayout>

@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="fill_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="fill_parent" style="@style/defaultBackground">
     <TextView android:id="@+id/menuWelcomeText"
         android:layout_width="fill_parent" android:layout_height="wrap_content"
-        style="@style/DefaultText" />
+        style="@style/TitleText" />
+    <View style="@style/SplitterHorizontal" />
     <TextView android:id="@+id/menuWelcomeHintText"
-        android:layout_width="fill_parent" android:layout_height="wrap_content" />
+        android:layout_width="fill_parent" android:layout_height="wrap_content"
+        style="@style/HintText" />
     <Button android:id="@+id/menuNewGameButton" android:text="@string/menu_new_game"
         android:layout_width="fill_parent" android:layout_height="wrap_content" />
     <Button android:id="@+id/menuPracticeButton" android:text="@string/menu_practice"
+        android:layout_width="fill_parent" android:layout_height="wrap_content" />
+    <Button android:id="@+id/menuStatisticsButton" android:text="@string/menu_statistcs"
         android:layout_width="fill_parent" android:layout_height="wrap_content" />
     <Button android:id="@+id/menuChangePlayerButton"
         android:text="@string/menu_change_player" android:layout_width="fill_parent"

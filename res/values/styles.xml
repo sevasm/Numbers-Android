@@ -1,21 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <style name="defaultBackground">
+        <item name="android:background">#FFD173</item>
+    </style>
     <style name="DefaultText" parent="@android:style/TextAppearance.Medium">
-        <item name="android:textColor">#CCCCCC</item>
-        <item name="android:textSize">22dp</item>
+        <item name="android:textColor">#664400</item>
+        <item name="android:textSize">22dip</item>
+        <item name="android:padding">2dip</item>
+        <!--item name="android:paddingTop">2dip</item>
+        <item name="android:paddingRight">4dip</item>
+        <item name="android:paddingBottom">2dip</item>
+        <item name="android:paddingLeft">4dip</item-->
     </style>
-    <style name="NameText" parent="@style/DefaultText">
-        <item name="android:textColor">#EEAA00</item>
-        <item name="android:textSize">18dp</item>
+    <style name="TitleText" parent="@style/DefaultText">
+        <item name="android:background">#FFAB00</item>
     </style>
-    <style name="NumberText" parent="@style/DefaultText">
+    <style name="SubTitleText" parent="@style/DefaultText">
+        <item name="android:textSize">18dip</item>
+        <item name="android:background">#FFC040</item>
+    </style>
+
+    <style name="NameText" parent="@style/TitleText">
+        <item name="android:textSize">18dip</item>
+    </style>
+    <style name="NumberText" parent="@style/SubTitleText">
     </style>
     <style name="GuessText" parent="@style/DefaultText">
-    </style>
-    <style name="PlayerText" parent="@style/DefaultText">
-        <item name="android:textColor">#EEAA00</item>
-        <item name="android:textSize">18dp</item>
+        <item name="android:textSize">18dip</item>
     </style>
     <style name="HintText" parent="@style/DefaultText">
+        <item name="android:textColor">#A66F00</item>
+        <item name="android:textSize">16dip</item>
+        <item name="android:background">#FFC040</item>
+    </style>
+
+    <style name="PlayerText" parent="@style/DefaultText">
+        <item name="android:textSize">18dip</item>
+        <item name="android:padding">4dip</item>
+    </style>
+
+    <style name="StatisticsText" parent="@style/DefaultText">
+        <item name="android:textSize">16dip</item>
+    </style>
+
+    <style name="DefaultTable" parent="@style/defaultBackground">
+    </style>
+    <style name="DefaultRow" parent="@style/defaultBackground">
+    </style>
+
+    <style name="SplitterHorizontal">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">1dip</item>
+        <item name="android:background">#664400</item>
+    </style>
+    <style name="SplitterVertical">
+        <item name="android:layout_width">1dip</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:background">#664400</item>
     </style>
 </resources>

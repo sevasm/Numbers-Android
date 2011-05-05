@@ -1,5 +1,7 @@
 package lt.ltech.numbers.android.entity;
 
+import java.math.BigDecimal;
+
 import lt.ltech.numbers.android.persistence.BasicEntity;
 
 public class Stats extends BasicEntity {
@@ -9,7 +11,7 @@ public class Stats extends BasicEntity {
     private Integer gamesWon;
     private Integer gamesDrawn;
     private Integer correctGuesses;
-    private Integer averageGuesses;
+    private BigDecimal averageGuesses;
 
     public Long getId() {
         return id;
@@ -59,17 +61,18 @@ public class Stats extends BasicEntity {
         this.correctGuesses = correctGuesses;
     }
 
-    public Integer getAverageGuesses() {
+    public BigDecimal getAverageGuesses() {
         return averageGuesses;
     }
 
-    public void setAverageGuesses(Integer averageGuesses) {
+    public void setAverageGuesses(BigDecimal averageGuesses) {
         this.averageGuesses = averageGuesses;
     }
 
     public String toString() {
-        return String.format("%3d %3d %3d %3d %3d %3d", gamesPlayed, gamesWon,
-                gamesDrawn, getGamesLost(), correctGuesses, averageGuesses);
+        return String.format("%3d %3d %3d %3d %3d %3s", gamesPlayed, gamesWon,
+                gamesDrawn, getGamesLost(), correctGuesses,
+                averageGuesses.toString());
     }
 
     public Integer getGamesLost() {

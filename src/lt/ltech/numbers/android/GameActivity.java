@@ -1,5 +1,8 @@
 package lt.ltech.numbers.android;
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.UUID;
@@ -66,6 +69,7 @@ public class GameActivity extends Activity {
     private Player computerPlayer;
     private HashMap<Player, ArtificialPlayer> artificialPlayers;
 
+    private LinearLayout numbers;
     private TextView numberLeft;
     private TextView numberRight;
 
@@ -98,8 +102,10 @@ public class GameActivity extends Activity {
         playerColumns.addView(columnLeft);
 
         columnRight = (LinearLayout) inf.inflate(R.layout.player_column, null);
-        columnRight.setLayoutParams(params);
-        playerColumns.addView(columnRight);
+        if (!isPractice()) {
+            columnRight.setLayoutParams(params);
+            playerColumns.addView(columnRight);
+        }
 
         hintText = (TextView) findViewById(R.id.hintText);
 
@@ -120,6 +126,7 @@ public class GameActivity extends Activity {
         clearButton = (Button) findViewById(R.id.gameClearButton);
         clearButton.setOnClickListener(getClearOnClickListener());
 
+        numbers = (LinearLayout) findViewById(R.id.gameNumbers);
         numberLeft = (TextView) findViewById(R.id.gameNumberLeft);
         numberRight = (TextView) findViewById(R.id.gameNumberRight);
 
@@ -181,6 +188,14 @@ public class GameActivity extends Activity {
         try {
             gameState.addPlayer(humanPlayer);
             gameState.addPlayer(computerPlayer);
+
+            if (isPractice()) {
+                Integer[] digits = { 0, 1, 2, 3 };
+                Number number = new Number(Arrays.asList(digits));
+                gameState.setNumber(humanPlayer, number);
+                guessButton.setText(getString(R.string.game_make_guess));
+                callArtifialPlayers();
+            }
         } catch (GameException ge) {
             logger.e(ge.getMessage());
         }
@@ -190,11 +205,16 @@ public class GameActivity extends Activity {
 
     private void resumeGame() {
         if (humanPlayer.getNumber() != null) {
-            numberLeft.setText(humanPlayer.getNumber().toString());
+            if (!isPractice()) {
+                numberLeft.setText(humanPlayer.getNumber().toString());
+            } else {
+                numberLeft.setText("");
+            }
             guessButton.setText(getString(R.string.game_make_guess));
 
             if (computerPlayer.getNumber() != null) {
-                numberRight.setText(computerPlayer.getNumber().toString());
+                Number number = computerPlayer.getNumber();
+                numberRight.setText(maskNumber(number));
             } else {
                 callArtifialPlayers();
             }
@@ -208,6 +228,16 @@ public class GameActivity extends Activity {
                     } else if (player.equals(computerPlayer)) {
                         addComputerGuessAndAnswer(guess, answer);
                     }
+                }
+            }
+        } else {
+            if (isPractice()) {
+                try {
+                    Integer[] digits = new Integer[] { 0, 1, 2, 3 };
+                    Number number = new Number(Arrays.asList(digits));
+                    gameState.setNumber(this.humanPlayer, number);
+                } catch (GameException e) {
+                    logger.e(e.getMessage());
                 }
             }
         }
@@ -281,15 +311,26 @@ public class GameActivity extends Activity {
 
                 if (a.isGameOver()) {
                     Player winner = a.gameState.getWinner();
+                    logger.i("Winner: %s, Player: %s", winner, a.humanPlayer);
+                    logger.i("HUman won: %b", a.humanPlayer.equals(winner));
+                    boolean humanWon = a.humanPlayer.equals(winner);
 
-                    updateStats(a.humanPlayer, a.humanPlayer.equals(winner),
-                            false);
+                    updateStats(a.humanPlayer, humanWon, false);
 
                     AlertDialog.Builder b = new AlertDialog.Builder(a);
                     int turns = a.gameState.getRounds().size();
                     b.setTitle("Game Over");
-                    String message = a.getString(R.string.game_winner);
-                    b.setMessage(String.format(message, winner.getName(), turns));
+                    String message;
+                    if (humanWon) {
+                        String s = getString(R.string.game_winner_player);
+                        logger.i("Message: %s", s);
+                        message = String.format(s, turns);
+                    } else {
+                        String s = getString(R.string.game_winner_computer);
+                        logger.i("Message: %s", s);
+                        message = String.format(s, turns, winner.getName());
+                    }
+                    b.setMessage(message);
                     b.setNeutralButton(getString(R.string.ok),
                             new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog,
@@ -306,21 +347,31 @@ public class GameActivity extends Activity {
     private void updateStats(Player player, boolean isWinner, boolean isDraw) {
         StatsDao statsDao = new StatsDao(this);
         Stats stats = statsDao.findByPlayer(player);
-        stats.setGamesPlayed(stats.getGamesPlayed() + 1);
-        if (isWinner) {
-            stats.setGamesWon(stats.getGamesWon() + 1);
+
+        if (!isPractice()) {
+            stats.setGamesPlayed(stats.getGamesPlayed() + 1);
+            if (isWinner) {
+                stats.setGamesWon(stats.getGamesWon() + 1);
+            }
+            if (isDraw) {
+                stats.setGamesDrawn(stats.getGamesDrawn() + 1);
+            }
         }
-        if (isDraw) {
-            stats.setGamesDrawn(stats.getGamesDrawn() + 1);
-        }
-        int averageGuesses = stats.getAverageGuesses();
-        int correctGuesses = stats.getCorrectGuesses();
+
         if (isWinner || isDraw) {
-            int guessCount = gameState.getRounds().size();
-            int totalGuesses = averageGuesses * correctGuesses + guessCount;
-            correctGuesses++;
-            averageGuesses = totalGuesses / correctGuesses;
-            stats.setCorrectGuesses(correctGuesses);
+            BigDecimal guessCount = new BigDecimal(gameState.getRounds().size());
+            BigDecimal correctGuesses = new BigDecimal(
+                    stats.getCorrectGuesses());
+            BigDecimal averageGuesses = stats.getAverageGuesses();
+
+            BigDecimal totalGuesses = averageGuesses.multiply(correctGuesses)
+                    .add(guessCount);
+            correctGuesses = correctGuesses.add(BigDecimal.ONE);
+            MathContext mc = new MathContext(10, RoundingMode.HALF_UP);
+            averageGuesses = totalGuesses.divide(correctGuesses, mc).setScale(
+                    2, RoundingMode.HALF_UP);
+
+            stats.setCorrectGuesses(correctGuesses.toBigInteger().intValue());
             stats.setAverageGuesses(averageGuesses);
         }
         statsDao.update(stats, stats.getId(), new StatsMapper());
@@ -335,12 +386,10 @@ public class GameActivity extends Activity {
             switch (t) {
                 case SET_NUMBER:
                     try {
-                        gameState.setNumber(p, ap.inventNumber());
-                        StringBuilder secretNumber = new StringBuilder();
-                        for (int i = 0; i < GameConfiguration.numberLength(); i++) {
-                            secretNumber.append("?");
-                        }
-                        numberRight.setText(secretNumber);
+                        Number number = ap.inventNumber();
+                        logger.i("Computer invented %s", number.toString());
+                        gameState.setNumber(p, number);
+                        numberRight.setText(maskNumber(number));
                         updateHint();
                     } catch (GameException ge) {
                         logger.e(ge.getMessage());
@@ -348,7 +397,13 @@ public class GameActivity extends Activity {
                     break;
                 case GUESS:
                     try {
-                        Number g = ap.makeGuess(gameState);
+                        Number g = null;
+                        if (!isPractice()) {
+                            g = ap.makeGuess(gameState);
+                        } else {
+                            Integer[] digits = { 9, 8, 7, 6 };
+                            g = new Number(Arrays.asList(digits));
+                        }
                         gameState.guess(p, g);
                         Answer ans = gameState.getLastRound().getAnswers()
                                 .get(computerPlayer);
@@ -449,6 +504,10 @@ public class GameActivity extends Activity {
         } else if (type == GameStep.Type.GUESS) {
             hintText.setText(R.string.hint_guess);
         }
+    }
+
+    private String maskNumber(Number number) {
+        return number.toString().replaceAll(".", "?");
     }
 
     private void setButtonsEnabled(boolean enabled) {

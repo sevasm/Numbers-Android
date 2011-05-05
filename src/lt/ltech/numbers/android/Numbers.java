@@ -20,30 +20,28 @@ public class Numbers extends Activity {
 
     public static final int RC_SELECT_PLAYER = 1;
 
-    private Player player = null;
+    private Player player;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.menu);
-        this.player = null;
         List<Player> players = new PlayerDao(this).findAll(new PlayerMapper());
         if (players.size() >= 1) {
-            this.player = players.get(0);
-            this.setWelcomeMessage();
+            player = players.get(0);
+            setWelcomeMessage();
         } else {
             Intent i = new Intent(this, SelectPlayerActivity.class);
-            this.startActivityForResult(i, RC_SELECT_PLAYER);
+            startActivityForResult(i, RC_SELECT_PLAYER);
         }
-        Button newGameButton = (Button) this
-                .findViewById(R.id.menuNewGameButton);
-        newGameButton.setOnClickListener(this.getNewGameListener());
-        Button practiceButton = (Button) this
-                .findViewById(R.id.menuPracticeButton);
-        practiceButton.setOnClickListener(this.getPracticeListener());
-        Button changePlayerButton = (Button) this
-                .findViewById(R.id.menuChangePlayerButton);
-        changePlayerButton.setOnClickListener(this.getSelectPlayerListener());
+        Button newGameButton = (Button) findViewById(R.id.menuNewGameButton);
+        newGameButton.setOnClickListener(getNewGameListener());
+        Button practiceButton = (Button) findViewById(R.id.menuPracticeButton);
+        practiceButton.setOnClickListener(getPracticeListener());
+        Button statisticsButton = (Button) findViewById(R.id.menuStatisticsButton);
+        statisticsButton.setOnClickListener(getStatisticsListener());
+        Button changePlayerButton = (Button) findViewById(R.id.menuChangePlayerButton);
+        changePlayerButton.setOnClickListener(getSelectPlayerListener());
     }
 
     private OnClickListener getNewGameListener() {
@@ -72,6 +70,18 @@ public class Numbers extends Activity {
         };
     }
 
+    private OnClickListener getStatisticsListener() {
+        final Numbers context = this;
+        return new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(context, StatisticsActivity.class);
+                i.putExtra(StatisticsActivity.PLAYER, context.player);
+                context.startActivity(i);
+            }
+        };
+    }
+
     private OnClickListener getSelectPlayerListener() {
         final Numbers context = this;
         return new OnClickListener() {
@@ -94,11 +104,11 @@ public class Numbers extends Activity {
     }
 
     private void setWelcomeMessage() {
-        TextView tv = (TextView) this.findViewById(R.id.menuWelcomeText);
-        tv.setText(String.format(this.getString(R.string.menu_welcome),
-                this.player.getName()));
-        TextView hint = (TextView) this.findViewById(R.id.menuWelcomeHintText);
-        hint.setText(String.format(this.getString(R.string.menu_welcome_hint),
-                this.player.getName()));
+        TextView tv = (TextView) findViewById(R.id.menuWelcomeText);
+        tv.setText(String.format(getString(R.string.menu_welcome),
+                player.getName()));
+        TextView hint = (TextView) findViewById(R.id.menuWelcomeHintText);
+        hint.setText(String.format(getString(R.string.menu_welcome_hint),
+                player.getName()));
     }
 }

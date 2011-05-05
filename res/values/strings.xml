@@ -2,18 +2,26 @@
 <resources>
     <string name="hello">Hello World, Numbers!</string>
     <string name="app_name">Numbers</string>
-<string name="menu_new_game">New Game</string>
-<string name="menu_welcome">Welcome back, %1$s!</string>
-<string name="menu_change_player">Change Player</string>
-<string name="player_select">Select a player from the list</string>
-<string name="player_create">If your name is not listed, enter your name and click Create</string>
-<string name="player_new">Create</string>
-<string name="game_make_guess">Guess</string>
-<string name="game_set_number">Pick Your Number</string>
-<string name="ok">OK</string>
-<string name="menu_practice">Practice</string>
-<string name="hint_number">Pick a number</string>
-<string name="hint_guess">Make a guess</string>
-<string name="menu_welcome_hint">Not %1$s? Click the change player button to pick a different player</string>
-<string name="game_winner">The game is over. %1$s has won in %2$d turns</string>
+    <string name="menu_new_game">New Game</string>
+    <string name="menu_welcome">Welcome back, %1$s!</string>
+    <string name="menu_statistcs">Statistics</string><string name="menu_change_player">Change Player</string>
+    <string name="player_select">Select a player from the list</string>
+    <string name="player_create">If your name is not listed, enter your name and click Create</string>
+    <string name="player_new">Create</string>
+    <string name="game_make_guess">Guess</string>
+    <string name="game_set_number">Pick Your Number</string>
+    <string name="ok">OK</string>
+    <string name="menu_practice">Practice</string>
+    <string name="hint_number">Pick a number</string>
+    <string name="hint_guess">Make a guess</string>
+    <string name="menu_welcome_hint">Not %1$s? Click the change player button to pick a different player</string>
+    <string name="game_winner_player">The game is over. You won in %1$d turns</string>
+    <string name="game_winner_computer">The game is over. %2$s won in %1$d turns</string>
+    <string name="stats_player">Statistics for %1$s</string>
+    <string name="stats_played">Played</string>
+    <string name="stats_won">Won</string>
+    <string name="stats_lost">Lost</string>
+    <string name="stats_correct">Total number of correct guesses</string>
+    <string name="stats_average">Average number of turns for each correct guess</string>
+    
 </resources>

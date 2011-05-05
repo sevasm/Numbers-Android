@@ -1,5 +1,6 @@
 package lt.ltech.numbers.android;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -85,6 +86,7 @@ public class SelectPlayerActivity extends Activity {
                     stats.setGamesWon(0);
                     stats.setGamesDrawn(0);
                     stats.setCorrectGuesses(0);
+                    stats.setAverageGuesses(BigDecimal.ZERO);
                     StatsDao statsDao = new StatsDao(activity);
                     statsDao.insert(stats, new StatsMapper());
                     logger.d("Created %s", player);

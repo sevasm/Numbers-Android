@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:a="http://schemas.android.com/apk/res/android"
     a:orientation="vertical" a:layout_width="fill_parent"
-    a:layout_height="fill_parent">
+    a:layout_height="fill_parent" style="@style/defaultBackground">
     <LinearLayout a:orientation="horizontal"
         a:layout_width="fill_parent" a:layout_height="wrap_content">
         <TextView a:id="@+id/gameNameLeft" a:layout_width="fill_parent"
@@ -11,7 +11,8 @@
             a:layout_height="wrap_content" a:layout_gravity="fill_horizontal"
             a:layout_weight="1.0" style="@style/NameText" />
     </LinearLayout>
-    <LinearLayout a:orientation="horizontal"
+    <View style="@style/SplitterHorizontal" />
+    <LinearLayout a:id="@+id/gameNumbers" a:orientation="horizontal"
         a:layout_width="fill_parent" a:layout_height="wrap_content">
         <TextView a:id="@+id/gameNumberLeft" a:layout_width="fill_parent"
             a:layout_height="wrap_content" a:layout_gravity="fill_horizontal"
@@ -20,14 +21,17 @@
             a:layout_height="wrap_content" a:layout_gravity="fill_horizontal"
             a:layout_weight="1.0" style="@style/NumberText" />
     </LinearLayout>
+    <View style="@style/SplitterHorizontal" />
     <ScrollView a:id="@+id/scrollView" a:layout_width="fill_parent"
         a:layout_height="wrap_content" a:layout_gravity="fill"
         a:layout_weight="1.0">
         <LinearLayout a:id="@+id/playerColumns"
             a:orientation="horizontal" a:layout_width="fill_parent"
-            a:layout_height="fill_parent" a:clipChildren="true">
+            a:layout_height="fill_parent" a:clipChildren="true"
+            a:paddingRight="2dip" a:paddingLeft="2dip">
         </LinearLayout>
     </ScrollView>
+    <View style="@style/SplitterHorizontal" />
     <LinearLayout a:orientation="vertical" a:layout_width="fill_parent"
         a:layout_height="wrap_content">
         <LinearLayout a:orientation="horizontal"
@@ -57,15 +61,12 @@
                 <LinearLayout a:id="@+id/gameButtonLayoutUpper"
                     a:orientation="horizontal" a:layout_width="fill_parent"
                     a:layout_height="wrap_content">
-
                 </LinearLayout>
                 <LinearLayout a:id="@+id/gameButtonLayoutLower"
                     a:orientation="horizontal" a:layout_width="fill_parent"
                     a:layout_height="wrap_content">
-
                 </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>
