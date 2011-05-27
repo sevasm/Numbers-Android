@@ -7,6 +7,10 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+/**
+ * This activity displays a page with player statistics.
+ * @author Severinas Monkevicius
+ */
 public class StatisticsActivity extends Activity {
     public static final String PLAYER = "player";
 

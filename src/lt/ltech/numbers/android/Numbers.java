@@ -15,6 +15,12 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+/**
+ * The activity started when the game is launched. If no players are present on
+ * the device the game is installed on, asks the player to
+ * {@link SelectPlayerActivity create a new player}.
+ * @author Severinas Monkevicius
+ */
 public class Numbers extends Activity {
     private static final Logger logger = new Logger(Numbers.class.getName());
 

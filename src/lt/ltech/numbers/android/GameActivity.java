@@ -38,6 +38,12 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+/**
+ * The activity that drives a game. Supports playing against a computer opponent
+ * or practice games. Should probably be split up at some stage smaller actually
+ * manageable bits.
+ * @author Severinas Monkevicius
+ */
 public class GameActivity extends Activity {
     public static final String PLAYER = "player";
     public static final String GAME_TYPE = "gameType";
