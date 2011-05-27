@@ -10,6 +10,10 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
+/**
+ * A base for classes that want to access the database.
+ * @author Severinas Monkevicius
+ */
 public abstract class NumbersDao {
     private final Logger logger = new Logger(this.getClass().getName());
     private DatabaseHelper pm;

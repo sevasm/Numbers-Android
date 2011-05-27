@@ -5,6 +5,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * A class to manage the application's database.
+ * @author Severinas Monkevicius
+ */
 public class DatabaseHelper extends SQLiteOpenHelper {
     private static final Logger logger = new Logger(
             DatabaseHelper.class.getName());
