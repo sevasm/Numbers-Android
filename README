@@ -1,0 +1,12 @@
+To compile and install this application to an Android device:
+0. Set up your Android development environment. A guide on how to do this
+   can be found here: http://developer.android.com/sdk/installing.html
+1. Checkout project from the repository
+2. Import it into Eclipse. The application has a dependency on the Numbers-Core
+   project, which has been packaged as numbers-core.jar in the lib folder for
+   convenience and is included in the project classpath. Alternatively, the
+   Numbers-Core project can also be checked out and Eclipse can be told to use
+   it instead of the provided JAR file.
+3. Attach an Android device
+4. Tell Eclipse to run the project as an Android Application and choose your
+   device when prompted
