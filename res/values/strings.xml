@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="hello">Hello World, Numbers!</string>
-    <string name="app_name">Numbers</string>
+    <string name="app_name">Numbers Game</string>
     <string name="menu_new_game">New Game</string>
     <string name="menu_welcome">Welcome back, %1$s!</string>
     <string name="menu_statistcs">Statistics</string><string name="menu_change_player">Change Player</string>
